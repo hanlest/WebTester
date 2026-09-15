@@ -26,3 +26,12 @@ coverage/
 *.swp
 *.swo
 *~
+
+# Compiled outputs (build artifacts)
+**/*.d.ts
+**/*.d.ts.map
+**/*.js
+**/*.js.map
+!vite.config.ts
+!apps/*/src/**/*.ts
+!apps/*/src/**/*.tsx
