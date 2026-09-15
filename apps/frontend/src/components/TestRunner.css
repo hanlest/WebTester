@@ -1,0 +1,169 @@
+.test-runner {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.test-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.test-editor h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.test-editor textarea {
+  min-height: 100px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-family: "Monaco", "Menlo", monospace;
+  font-size: 13px;
+  resize: vertical;
+  background: #fafafa;
+}
+
+.test-editor textarea:disabled {
+  background: #f0f0f0;
+  cursor: not-allowed;
+}
+
+.test-editor button {
+  width: 100%;
+  padding: 10px;
+  background: #0066cc;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.test-editor button:hover:not(:disabled) {
+  background: #0052a3;
+}
+
+.test-editor button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.test-logs {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 300px;
+}
+
+.test-logs h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.logs-content {
+  flex: 1;
+  overflow-y: auto;
+  background: #f9f9f9;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  padding: 8px;
+  font-family: "Monaco", "Menlo", monospace;
+  font-size: 12px;
+}
+
+.log-entry {
+  margin-bottom: 4px;
+  padding: 6px;
+  border-radius: 2px;
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.log-info {
+  background: #f0f4f8;
+  color: #0066cc;
+}
+
+.log-warn {
+  background: #fff4e6;
+  color: #d97706;
+}
+
+.log-error {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.log-debug {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.log-time {
+  color: #999;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.log-level {
+  color: inherit;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.log-message {
+  flex: 1;
+  word-break: break-word;
+}
+
+.log-data {
+  color: #666;
+  font-size: 11px;
+  width: 100%;
+  word-break: break-all;
+  opacity: 0.8;
+}
+
+.test-result {
+  padding: 16px;
+  border-radius: 4px;
+  border-left: 4px solid;
+}
+
+.test-result.passed {
+  background: #f0fdf4;
+  border-color: #22c55e;
+  color: #166534;
+}
+
+.test-result.failed {
+  background: #fef2f2;
+  border-color: #ef4444;
+  color: #991b1b;
+}
+
+.test-result h3 {
+  margin: 0 0 8px 0;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.test-result p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+}

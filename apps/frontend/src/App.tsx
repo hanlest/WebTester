@@ -1,13 +1,17 @@
 import { useState } from "react";
 import { DEVICE_PROFILES, DeviceProfile } from "@web-tester/shared";
 import { Browser } from "./components/Browser";
+import { TestRunner } from "./components/TestRunner";
 import "./App.css";
+
+type Tab = "browser" | "test";
 
 export function App() {
   const [url, setUrl] = useState("https://example.com");
   const [deviceProfile, setDeviceProfile] = useState<DeviceProfile>("desktop");
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState<Tab>("browser");
 
   const handleStart = async () => {
     setLoading(true);
@@ -76,7 +80,23 @@ export function App() {
         {sessionId && <div className="session-info">Session: {sessionId}</div>}
       </div>
 
-      <div className="content">{sessionId && <Browser sessionId={sessionId} />}</div>
+      <div className="content">
+        {sessionId && (
+          <>
+            <div className="tabs">
+              <button className={`tab ${activeTab === "browser" ? "active" : ""}`} onClick={() => setActiveTab("browser")}>
+                📹 Live Browser
+              </button>
+              <button className={`tab ${activeTab === "test" ? "active" : ""}`} onClick={() => setActiveTab("test")}>
+                🤖 AI Test
+              </button>
+            </div>
+
+            {activeTab === "browser" && <Browser sessionId={sessionId} />}
+            {activeTab === "test" && <TestRunner sessionId={sessionId} />}
+          </>
+        )}
+      </div>
     </div>
   );
 }
