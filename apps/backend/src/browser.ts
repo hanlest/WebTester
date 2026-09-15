@@ -1,6 +1,9 @@
 import { chromium, Browser, Page, CDPSession } from "playwright";
 import { DEVICE_PROFILES, DeviceProfile } from "@web-tester/shared";
 import type { WebSocket } from "ws";
+import { AgentLoop } from "./agent/loop.js";
+import { AIProvider } from "./ai/index.js";
+import type { AgentLog } from "./agent/types.js";
 
 interface SessionData {
   id: string;
@@ -8,6 +11,7 @@ interface SessionData {
   page: Page;
   deviceProfile: DeviceProfile;
   websockets: Set<WebSocket>;
+  agentLoop?: AgentLoop;
 }
 
 export class BrowserManager {
@@ -69,9 +73,58 @@ export class BrowserManager {
 
   private async startScreencast(session: SessionData, ws: WebSocket): Promise<void> {
     const { page, id: sessionId } = session;
-    const client = await page.context().newCDPSession(page);
 
     try {
+      console.log("[Screencast] Getting CDP session for:", sessionId);
+      const client = await page.context().newCDPSession(page);
+      console.log("[Screencast] CDP session obtained");
+
+      let frameCount = 0;
+      let lastAckTime = Date.now();
+
+      // Set up listener with error handling
+      const onFrame = async (event: any) => {
+        frameCount++;
+        const now = Date.now();
+        const timeSinceLastAck = now - lastAckTime;
+
+        console.log(`[Frame ${frameCount}] received, dataLength=${event.data?.length}, timeSinceLastAck=${timeSinceLastAck}ms`);
+
+        if (!event.data) {
+          console.error("[Frame] No data in event:", event);
+          return;
+        }
+
+        try {
+          ws.send(
+            JSON.stringify({
+              type: "screencast",
+              payload: {
+                timestamp: now,
+                data: event.data,
+                sessionId,
+              },
+            })
+          );
+        } catch (e) {
+          console.error("[Frame] Failed to send to WebSocket:", e);
+        }
+
+        // Send ACK
+        try {
+          await (client as any).send("Page.screencastFrameAck", { sessionId: event.sessionId });
+          lastAckTime = Date.now();
+          console.log(`[Frame ${frameCount}] ACK sent`);
+        } catch (e) {
+          console.error(`[Frame ${frameCount}] Failed to send ACK:`, e);
+        }
+      };
+
+      (client as any).on("Page.screencastFrame", onFrame);
+      console.log("[Screencast] Frame listener registered");
+
+      // Start screencast
+      console.log("[Screencast] Calling startScreencast...");
       await (client as any).send("Page.startScreencast", {
         format: "jpeg",
         quality: 80,
@@ -79,25 +132,20 @@ export class BrowserManager {
         maxHeight: 720,
       });
 
-      (client as any).on("Page.screencastFrame", async (event: any) => {
-        const frameData = event.data;
-        ws.send(
-          JSON.stringify({
-            type: "screencast",
-            payload: {
-              timestamp: Date.now(),
-              data: frameData,
-              sessionId,
-            },
-          })
-        );
-
-        await (client as any).send("Page.screencastFrameAck", { sessionId: event.sessionId }).catch(() => {});
-      });
-
+      console.log("[Screencast] startScreencast completed successfully");
       ws.send(JSON.stringify({ type: "log", payload: { level: "info", message: `Screencast started for ${session.deviceProfile}`, timestamp: Date.now() } }));
+
+      // Keep the session alive by checking periodically
+      const healthCheckInterval = setInterval(() => {
+        if (ws.readyState !== 1) { // WebSocket.OPEN
+          console.log("[Screencast] WebSocket closed, stopping screencast");
+          clearInterval(healthCheckInterval);
+          (client as any).off("Page.screencastFrame", onFrame);
+        }
+      }, 5000);
+
     } catch (error) {
-      console.error("Screencast error:", error);
+      console.error("[Screencast] Fatal error:", error);
       ws.send(JSON.stringify({ type: "error", payload: { message: String(error) } }));
     }
   }
@@ -115,5 +163,38 @@ export class BrowserManager {
 
     await session.browser.close();
     this.sessions.delete(sessionId);
+  }
+
+  async executeTest(sessionId: string, testCase: string, aiProvider: AIProvider): Promise<{ passed: boolean; reasoning: string; logs: AgentLog[] }> {
+    const session = this.sessions.get(sessionId);
+    if (!session) {
+      throw new Error(`Session ${sessionId} not found`);
+    }
+
+    console.log(`[Test] Starting test for session ${sessionId}`);
+
+    const agentLoop = new AgentLoop(aiProvider, session.page, (log: AgentLog) => {
+      // Broadcast agent logs to all connected WebSockets
+      for (const ws of session.websockets) {
+        if (ws.readyState === 1) {
+          ws.send(
+            JSON.stringify({
+              type: "agent_log",
+              payload: log,
+            })
+          );
+        }
+      }
+    });
+
+    session.agentLoop = agentLoop;
+
+    const result = await agentLoop.executeTest(testCase);
+
+    return {
+      passed: result.passed,
+      reasoning: result.reasoning,
+      logs: result.logs,
+    };
   }
 }

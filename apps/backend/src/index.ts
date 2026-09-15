@@ -3,9 +3,18 @@ import Fastify from "fastify";
 import cors from "@fastify/cors";
 import websocket from "@fastify/websocket";
 import { BrowserManager } from "./browser.js";
+import { createAIProvider } from "./ai/index.js";
 
 const app = Fastify({ logger: true });
 const browserManager = new BrowserManager();
+let aiProvider: ReturnType<typeof createAIProvider> | null = null;
+
+try {
+  aiProvider = createAIProvider();
+  console.log(`✅ AI Provider initialized: ${process.env.AI_PROVIDER || "anthropic"}`);
+} catch (error) {
+  console.error("❌ Failed to initialize AI Provider:", error);
+}
 
 await app.register(cors);
 await app.register(websocket);
@@ -48,6 +57,27 @@ app.post<{ Params: { sessionId: string } }>("/api/session/:sessionId/stop", asyn
   } catch (error) {
     app.log.error(error);
     return reply.status(500).send({ error: "Failed to close session" });
+  }
+});
+
+app.post<{ Params: { sessionId: string }; Body: { testCase: string } }>("/api/session/:sessionId/test/execute", async (request, reply) => {
+  const { sessionId } = request.params;
+  const { testCase } = request.body;
+
+  if (!aiProvider) {
+    return reply.status(500).send({ error: "AI Provider not initialized" });
+  }
+
+  if (!testCase) {
+    return reply.status(400).send({ error: "testCase is required" });
+  }
+
+  try {
+    const result = await browserManager.executeTest(sessionId, testCase, aiProvider);
+    return { testId: `test_${Date.now()}`, ...result };
+  } catch (error) {
+    app.log.error(error);
+    return reply.status(500).send({ error: String(error) });
   }
 });
 
