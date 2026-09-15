@@ -1,3 +1,4 @@
+import "dotenv/config";
 import Fastify from "fastify";
 import cors from "@fastify/cors";
 import websocket from "@fastify/websocket";
@@ -11,6 +12,15 @@ await app.register(websocket);
 
 app.get("/health", async () => {
   return { status: "ok" };
+});
+
+app.get("/config", async () => {
+  return {
+    aiProvider: process.env.AI_PROVIDER || "anthropic",
+    hasAnthropicKey: !!process.env.ANTHROPIC_API_KEY,
+    hasOpenAIKey: !!process.env.OPENAI_API_KEY,
+    backendPort: process.env.BACKEND_PORT || 3001,
+  };
 });
 
 app.post<{ Body: { url: string; deviceProfile: "desktop" | "iphone" | "pixel" } }>("/api/session/start", async (request, reply) => {
