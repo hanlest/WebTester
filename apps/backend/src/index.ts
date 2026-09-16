@@ -51,8 +51,8 @@ app.post<{ Body: { url: string; deviceProfile: "desktop" | "iphone" | "pixel" } 
   }
 
   try {
-    const sessionId = await browserManager.createSession(url, deviceProfile || "desktop");
-    return { sessionId, status: "created" };
+    const { sessionId, navigationError } = await browserManager.createSession(url, deviceProfile || "desktop");
+    return { sessionId, status: "created", navigationError };
   } catch (error) {
     app.log.error(error);
     return reply.status(500).send({ error: "Failed to create session" });

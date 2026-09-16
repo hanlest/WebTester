@@ -21,6 +21,9 @@ export function App() {
             const data = await res.json();
             if (data.sessionId) {
                 setSessionId(data.sessionId);
+                if (data.navigationError) {
+                    alert(`Session created, but navigation failed:\n\n${data.navigationError}\n\nThe browser is showing a blank page. Check the URL and try again.`);
+                }
             }
             else {
                 alert("Failed to start session");

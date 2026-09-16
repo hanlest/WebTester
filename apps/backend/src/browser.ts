@@ -18,9 +18,11 @@ export class BrowserManager {
   private sessions = new Map<string, SessionData>();
   private sessionCounter = 0;
 
-  async createSession(url: string, deviceProfile: DeviceProfile): Promise<string> {
+  async createSession(url: string, deviceProfile: DeviceProfile): Promise<{ sessionId: string; navigationError?: string }> {
     const sessionId = `session_${++this.sessionCounter}_${Date.now()}`;
     const profile = DEVICE_PROFILES[deviceProfile];
+
+    const normalizedUrl = /^[a-zA-Z][a-zA-Z0-9+.-]*:\/\//.test(url) ? url : `https://${url}`;
 
     const launchOptions = profile.userAgent
       ? {
@@ -36,9 +38,14 @@ export class BrowserManager {
     });
 
     const page = await context.newPage();
-    await page.goto(url, { waitUntil: "load", timeout: 30000 }).catch((e) => {
-      console.error("Navigation error:", e);
-    });
+
+    let navigationError: string | undefined;
+    try {
+      await page.goto(normalizedUrl, { waitUntil: "load", timeout: 30000 });
+    } catch (e) {
+      navigationError = e instanceof Error ? e.message : String(e);
+      console.error("Navigation error:", navigationError);
+    }
 
     this.sessions.set(sessionId, {
       id: sessionId,
@@ -48,7 +55,7 @@ export class BrowserManager {
       websockets: new Set(),
     });
 
-    return sessionId;
+    return { sessionId, navigationError };
   }
 
   async attachWebSocket(sessionId: string, ws: WebSocket): Promise<void> {
