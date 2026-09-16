@@ -1,5 +1,4 @@
-declare const __BACKEND_URL__: string;
-declare const __BACKEND_WS_URL__: string;
+const backendPort = import.meta.env.BACKEND_PORT || "3001";
 
-export const BACKEND_URL = __BACKEND_URL__;
-export const BACKEND_WS_URL = __BACKEND_WS_URL__;
+export const BACKEND_URL = `http://localhost:${backendPort}`;
+export const BACKEND_WS_URL = `ws://localhost:${backendPort}`;
