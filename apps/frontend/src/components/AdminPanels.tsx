@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import type { DeviceProfile } from "@web-tester/shared";
 import { apiGet, apiPatch, apiPost, apiPut } from "../api/client";
 import { BACKEND_URL } from "../config";
+import { Win311Combo } from "./Win311Combo";
 import "./AdminPanels.css";
 
 interface Project {
@@ -86,11 +87,11 @@ export function ProjectsPanel() {
     <div className="admin-panel">
       <h2>Proyectos y apps</h2>
       <div className="row">
-        <select value={selected} onChange={(e) => setSelected(e.target.value)}>
+        <Win311Combo value={selected} onChange={(e) => setSelected(e.target.value)}>
           {projects.map((p) => (
             <option key={p.id} value={p.id}>{p.name}</option>
           ))}
-        </select>
+        </Win311Combo>
         <input placeholder="Nuevo proyecto" value={newProject} onChange={(e) => setNewProject(e.target.value)} />
         <button type="button" onClick={addProject}>Crear</button>
       </div>

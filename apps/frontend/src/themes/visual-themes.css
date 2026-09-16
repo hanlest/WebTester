@@ -15,17 +15,17 @@
 }
 
 [data-visual-theme="win311"] {
-  --wt-bg: #008080;
+  --wt-bg: #c0c0c0;
   --wt-sidebar-bg: #c0c0c0;
-  --wt-panel-bg: #c0c0c0;
+  --wt-panel-bg: #ffffff;
   --wt-text: #000000;
   --wt-muted: #202020;
   --wt-accent: #000080;
-  --wt-accent-hover: #0000aa;
+  --wt-accent-hover: #000080;
   --wt-border: #000000;
   --wt-radius: 0;
-  --wt-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #dfdfdf, inset -2px -2px #808080, inset 2px 2px #ffffff;
-  --wt-font: "MS Sans Serif", Tahoma, Arial, sans-serif;
+  --wt-shadow: none;
+  --wt-font: "MS Sans Serif", "Microsoft Sans Serif", "Micross", Tahoma, Arial, sans-serif;
   --wt-btn-radius: 0;
 }
 

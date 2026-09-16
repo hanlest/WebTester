@@ -53,8 +53,18 @@
 }
 
 .form-group input,
-.form-group select {
+.form-group select,
+.form-group .win311-combo {
   width: 100%;
+}
+
+.win311-combo > select {
+  width: 100%;
+}
+
+.win311-combo-split,
+.win311-combo-btn {
+  display: none;
 }
 
 .sidebar > button:not(.nav-btn) {
