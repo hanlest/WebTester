@@ -17,7 +17,7 @@ interface Win311NavProps {
 
 export function Win311Nav({ view, onSelect }: Win311NavProps) {
   return (
-    <div className="win311-nav">
+    <div className="retro-nav">
       <nav className="main-nav tree-nav" aria-label="Navegación">
         <div className="tree-panel">
           <div className="tree-group">

@@ -1,8 +1,9 @@
 import { useEffect, useRef, type ReactNode } from "react";
+import { useVisualTheme } from "../context/VisualThemeContext";
 
 export function Win311MenuBar() {
   return (
-    <div className="win311-menu-bar" role="presentation">
+    <div className="retro-menu-bar" role="presentation">
       <span><u>F</u>ile</span>
       <span><u>O</u>ptions</span>
       <span><u>W</u>indow</span>
@@ -19,15 +20,15 @@ interface Win311WindowProps {
 
 function Win311WindowFrameMarks() {
   return (
-    <div className="win311-window-marks" aria-hidden>
-      <span className="win311-mark-top-rail-tl" />
-      <span className="win311-mark-side-rail-tl" />
-      <span className="win311-mark-top-rail-tr" />
-      <span className="win311-mark-side-rail-tr" />
-      <span className="win311-mark-bottom-rail-bl" />
-      <span className="win311-mark-side-rail-bl" />
-      <span className="win311-mark-bottom-rail-br" />
-      <span className="win311-mark-side-rail-br" />
+    <div className="retro-window-marks" aria-hidden>
+      <span className="retro-mark-top-rail-tl" />
+      <span className="retro-mark-side-rail-tl" />
+      <span className="retro-mark-top-rail-tr" />
+      <span className="retro-mark-side-rail-tr" />
+      <span className="retro-mark-bottom-rail-bl" />
+      <span className="retro-mark-side-rail-bl" />
+      <span className="retro-mark-bottom-rail-br" />
+      <span className="retro-mark-side-rail-br" />
     </div>
   );
 }
@@ -56,33 +57,46 @@ function Win311WindowClient({ children }: { children: ReactNode }) {
   }, [children]);
 
   return (
-    <div ref={clientRef} className="win311-window-client">
+    <div ref={clientRef} className="retro-window-client">
       {children}
     </div>
   );
 }
 
 export function Win311Window({ title, children, className = "" }: Win311WindowProps) {
+  const { theme } = useVisualTheme();
+  const isMacClassic = theme === "mac-classic-ii";
+
   return (
-    <div className={`win311-window ${className}`.trim()}>
+    <div className={`retro-window ${className}`.trim()}>
       <Win311WindowFrameMarks />
-      <div className="win311-window-inner">
-        <div className="win311-window-chrome">
-          <div className="win311-window-titlebar">
-            <button type="button" className="win311-title-btn win311-title-sys" tabIndex={-1} aria-hidden="true">
-              <span className="win311-title-icon win311-title-icon-sys" />
-            </button>
-            <span className="win311-title-controls-split" aria-hidden="true" />
-            <span className="win311-window-title">{title}</span>
-            <div className="win311-title-controls">
-              <span className="win311-title-controls-split" aria-hidden="true" />
-              <button type="button" className="win311-title-btn" tabIndex={-1} aria-hidden="true">
-                <span className="win311-title-icon win311-title-icon-down" />
+      <div className="retro-window-inner">
+        <div className="retro-window-chrome">
+          <div className="retro-window-titlebar">
+            <div className="retro-titlebar-leading">
+              <button type="button" className="retro-title-btn retro-title-sys" tabIndex={-1} aria-hidden="true">
+                {!isMacClassic ? <span className="retro-title-icon retro-title-icon-sys" /> : null}
               </button>
-              <span className="win311-title-controls-split" aria-hidden="true" />
-              <button type="button" className="win311-title-btn" tabIndex={-1} aria-hidden="true">
-                <span className="win311-title-icon win311-title-icon-up" />
-              </button>
+              {!isMacClassic ? <span className="retro-title-controls-split" aria-hidden="true" /> : null}
+            </div>
+            <div className="retro-titlebar-center">
+              <span className="retro-window-title">{title}</span>
+            </div>
+            <div className="retro-titlebar-trailing">
+              {isMacClassic ? (
+                <span className="retro-titlebar-trailing-spacer" aria-hidden="true" />
+              ) : (
+                <div className="retro-title-controls">
+                  <span className="retro-title-controls-split" aria-hidden="true" />
+                  <button type="button" className="retro-title-btn" tabIndex={-1} aria-hidden="true">
+                    <span className="retro-title-icon retro-title-icon-down" />
+                  </button>
+                  <span className="retro-title-controls-split" aria-hidden="true" />
+                  <button type="button" className="retro-title-btn" tabIndex={-1} aria-hidden="true">
+                    <span className="retro-title-icon retro-title-icon-up" />
+                  </button>
+                </div>
+              )}
             </div>
           </div>
           <Win311MenuBar />

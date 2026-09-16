@@ -1,5 +1,6 @@
 @import "./themes/visual-themes.css";
 @import "./themes/win311.css";
+@import "./themes/mac-classic.css";
 
 * {
   margin: 0;
@@ -7,9 +8,13 @@
   box-sizing: border-box;
 }
 
+html {
+  letter-spacing: var(--wt-letter-spacing);
+}
+
 body {
   font-family: var(--wt-font);
-  background: var(--wt-bg);
+  background-color: var(--wt-bg);
   color: var(--wt-text);
 }
 

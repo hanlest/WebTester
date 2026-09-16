@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { type ReactNode } from "react";
 export declare function Win311MenuBar(): import("react").JSX.Element;
 interface Win311WindowProps {
     title: string;

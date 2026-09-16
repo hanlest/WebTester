@@ -214,21 +214,47 @@ export function SettingsPanel() {
   };
 
   return (
-    <div className="admin-panel">
+    <div className="admin-panel settings-panel">
       <h2>Ajustes</h2>
-      <p className="muted">Base de datos Postgres (Fase 5) — solo lectura para el agente.</p>
-      <input
-        placeholder="postgresql://user:pass@localhost:5432/db"
-        value={dbUrl}
-        onChange={(e) => setDbUrl(e.target.value)}
-        style={{ width: "100%" }}
-      />
-      <button type="button" onClick={saveDb}>Guardar conexión</button>
-      <p>Estado: {dbStatus?.configured ? "configurado" : "no configurado"}</p>
-      <hr />
-      <h3>Export / Import (Fase 6)</h3>
-      <button type="button" onClick={exportData}>Exportar JSON</button>
-      <input type="file" accept="application/json" onChange={(e) => e.target.files?.[0] && importData(e.target.files[0])} />
+
+      <section className="admin-panel-section" aria-labelledby="settings-db-heading">
+        <p id="settings-db-heading" className="section-label">Base de datos Postgres (Fase 5)</p>
+        <p className="muted">Solo lectura para el agente.</p>
+        <div className="form-group">
+          <label htmlFor="settings-db-url">Cadena de conexión</label>
+          <input
+            id="settings-db-url"
+            type="text"
+            placeholder="postgresql://user:pass@localhost:5432/db"
+            value={dbUrl}
+            onChange={(e) => setDbUrl(e.target.value)}
+            autoComplete="off"
+          />
+        </div>
+        <div className="admin-panel-actions">
+          <button type="button" className="mac-btn-default" onClick={saveDb}>Guardar conexión</button>
+        </div>
+        <p className="status-line">
+          Estado: {dbStatus?.configured ? "configurado" : "no configurado"}
+        </p>
+      </section>
+
+      <hr className="admin-panel-divider" />
+
+      <section className="admin-panel-section" aria-labelledby="settings-export-heading">
+        <h3 id="settings-export-heading" className="section-label">Export / Import (Fase 6)</h3>
+        <div className="admin-panel-actions">
+          <button type="button" onClick={exportData}>Exportar JSON</button>
+          <label className="admin-file-input">
+            <span>Importar JSON</span>
+            <input
+              type="file"
+              accept="application/json"
+              onChange={(e) => e.target.files?.[0] && importData(e.target.files[0])}
+            />
+          </label>
+        </div>
+      </section>
     </div>
   );
 }

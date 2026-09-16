@@ -74,11 +74,11 @@ export function TestRunner({ sessionId, agentLogs, onClearAgentLogs }: TestRunne
           placeholder="Describe your test case in natural language..."
         />
         <div className="test-actions">
-          <button onClick={handleRunTest} disabled={isRunning || !testCase}>
+          <button type="button" className="mac-btn-default" onClick={handleRunTest} disabled={isRunning || !testCase}>
             {isRunning ? "Running..." : "Run Test"}
           </button>
           {isRunning && (
-            <button onClick={handleStopTest} className="stop-test-btn">
+            <button type="button" className="stop-test-btn mac-btn-default" onClick={handleStopTest}>
               Stop
             </button>
           )}

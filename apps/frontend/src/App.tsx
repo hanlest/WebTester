@@ -8,6 +8,7 @@ import { useSessionWebSocket } from "./hooks/useSessionWebSocket";
 import { apiGet } from "./api/client";
 import { Win311Nav } from "./components/Win311Nav";
 import { Win311Combo } from "./components/Win311Combo";
+import { MacScreenMenuBar } from "./components/MacScreenMenuBar";
 import { Win311Window } from "./components/Win311Window";
 import { WIN311_VIEW_TITLES } from "./app-view-titles";
 import { BACKEND_URL } from "./config";
@@ -33,7 +34,8 @@ export function App() {
   const [projectId, setProjectId] = useState<string>("");
 
   const { browserLogs, agentLogs, screencastPaused, subscribeScreencast, clearAgentLogs } = useSessionWebSocket(sessionId);
-  const isWin311 = theme === "win311";
+  const isMacClassic = theme === "mac-classic-ii";
+  const isRetroShell = theme === "win311" || isMacClassic;
 
   useEffect(() => {
     void (async () => {
@@ -112,7 +114,7 @@ export function App() {
 
   const themeSelector = (
     <div className="form-group">
-      <label>{isWin311 ? "Tema visual" : "Tema visual (Fase 7)"}</label>
+      <label>{isRetroShell ? "Tema visual" : "Tema visual (Fase 7)"}</label>
       <Win311Combo value={theme} onChange={(e) => setTheme(e.target.value as typeof theme)}>
         {themes.map((t) => (
           <option key={t.id} value={t.id}>{t.name}</option>
@@ -121,7 +123,7 @@ export function App() {
     </div>
   );
 
-  const navigation = isWin311 ? (
+  const navigation = isRetroShell ? (
     <Win311Nav view={view} onSelect={setView} />
   ) : (
     <nav className="main-nav">
@@ -171,11 +173,11 @@ export function App() {
         </div>
 
         {!sessionId ? (
-          <button onClick={handleStart} disabled={loading || !url}>
+          <button type="button" className="mac-btn-default" onClick={handleStart} disabled={loading || !url}>
             {loading ? "Starting..." : "Start Session"}
           </button>
         ) : (
-          <button onClick={handleStop} className="stop-btn">Stop Session</button>
+          <button type="button" className="stop-btn mac-btn-default" onClick={handleStop}>Stop Session</button>
         )}
 
         {sessionId && <div className="session-info">Session: {sessionId}</div>}
@@ -221,26 +223,42 @@ export function App() {
     </>
   );
 
-  return (
-    <div className="app">
-      {isWin311 ? (
-        <Win311Window title="Program Manager" className="win311-sidebar">
-          {sidebarBody}
-        </Win311Window>
-      ) : (
-        <div className="sidebar">
-          <h1>Web Tester</h1>
-          {sidebarBody}
-        </div>
-      )}
+  const sidebarWindowTitle = isMacClassic ? "Web Tester" : "Program Manager";
+  const windows = (
+    <>
+      <Win311Window title={sidebarWindowTitle} className="retro-sidebar">
+        {sidebarBody}
+      </Win311Window>
+      <Win311Window title={WIN311_VIEW_TITLES[view]} className="retro-content">
+        <div className="content-inner">{mainContent}</div>
+      </Win311Window>
+    </>
+  );
 
-      {isWin311 ? (
-        <Win311Window title={WIN311_VIEW_TITLES[view]} className="win311-content">
-          <div className="content-inner">{mainContent}</div>
-        </Win311Window>
+  const appShell = (
+    <div className="app">
+      {isMacClassic ? <MacScreenMenuBar /> : null}
+      {isRetroShell ? (
+        <div className={isMacClassic ? "mac-app-windows" : "retro-app-windows"}>{windows}</div>
       ) : (
-        <div className="content">{mainContent}</div>
+        <>
+          <div className="sidebar">
+            <h1>Web Tester</h1>
+            {sidebarBody}
+          </div>
+          <div className="content">{mainContent}</div>
+        </>
       )}
     </div>
   );
+
+  if (isMacClassic) {
+    return (
+      <div className="mac-page-frame">
+        <div className="mac-page-surface">{appShell}</div>
+      </div>
+    );
+  }
+
+  return appShell;
 }

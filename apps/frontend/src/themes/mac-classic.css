@@ -1,0 +1,1564 @@
+/* Macintosh System 6 / Classic — shell autocontenido (sin Win 3.11) */
+
+@import url("https://fonts.googleapis.com/css2?family=Handjet:wght@400;500;700;800&display=swap");
+
+@font-face {
+  font-family: "Chicago";
+  src:
+    local("Chicago"),
+    local("Chicago FLF"),
+    url("/fonts/Chicago.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+
+[data-visual-theme="mac-classic-ii"] {
+  --wt-bg: #ffffff;
+  --wt-sidebar-bg: #ffffff;
+  --wt-panel-bg: #ffffff;
+  --wt-text: #000000;
+  --wt-muted: #000000;
+  --wt-border: #000000;
+  --wt-shadow: none;
+  /* Handjet (pixel) + Chicago WOFF + sistema — https://fonts.google.com/specimen/Handjet */
+  --wt-font: "Handjet", "Chicago", Geneva, "Lucida Grande", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --wt-mac-font-weight: 500;
+  --wt-mac-font-weight-strong: 800;
+  --wt-letter-spacing: 0.06em;
+  font-size: 14px;
+  letter-spacing: var(--wt-letter-spacing);
+  font-weight: var(--wt-mac-font-weight);
+  --wt-btn-radius: 0;
+  --wt-mac-btn-radius: 5px;
+  --wt-mac-btn-pad-x: 16px;
+  --wt-mac-btn-pad-y: 3px;
+  --wt-titlebar-bg: #ffffff;
+  --wt-titlebar-fg: #000000;
+  --wt-bevel-light: #ffffff;
+  --wt-bevel-mid: #ffffff;
+  --wt-bevel-dark: #000000;
+  --wt-frame-line: 1px;
+  --wt-frame-band: 0px;
+  --wt-mac-title-stripe-period: 3px; /* 1px línea + 2px blanco */
+  --wt-mac-title-stripe-count: 6;
+  --wt-mac-title-stripe-offset-y: 1px;
+  --wt-titlebar-height: calc(var(--wt-mac-title-stripe-period) * var(--wt-mac-title-stripe-count));
+  --wt-title-btn-size: 11px;
+  --wt-mac-close-size: 16px;
+  /* Franja blanca a cada lado del close box (ajustar si hace falta) */
+  --wt-mac-close-inline-gap: 2px;
+  --wt-mac-close-offset-x: 6px;
+  --wt-mac-page-frame-pad: 10px;
+  --wt-mac-page-surface-radius: 10px;
+  --wt-control-outline: 1px;
+  --wt-select-btn: 14px;
+  --wt-scrollbar-size: 16px;
+  /* Tramado gris (tile 6×6, capas a 3px); blur solo en escritorio (::before) */
+  --wt-mac-dither-gray: #686868;
+  --wt-mac-dither-base: #e8e8e8;
+  --wt-mac-dither-size: 6px;
+  --wt-mac-dither:
+    linear-gradient(45deg, var(--wt-mac-dither-gray) 25%, transparent 25%, transparent 75%, var(--wt-mac-dither-gray) 75%, var(--wt-mac-dither-gray) 100%),
+    linear-gradient(45deg, var(--wt-mac-dither-gray) 25%, transparent 25%, transparent 75%, var(--wt-mac-dither-gray) 75%, var(--wt-mac-dither-gray) 100%);
+  --wt-mac-dither-position: 0 0, 3px 3px;
+  --wt-mac-dither-blur: 0.5px;
+  /* Scrollbar: 1px oscuro + 2px blanco (H/V) entre píxeles; capas intercaladas */
+  --wt-mac-scrollbar-dither-gap: 2px;
+  --wt-mac-scrollbar-dither-size: 3px; /* 1px + gap */
+  --wt-mac-scrollbar-dither-position: 0 0, 1.5px 1.5px;
+  --wt-mac-scrollbar-dither:
+    radial-gradient(circle at 0.5px 0.5px, var(--wt-mac-dither-gray) 0.5px, transparent 0.55px),
+    radial-gradient(circle at 0.5px 0.5px, var(--wt-mac-dither-gray) 0.5px, transparent 0.55px);
+  --wt-mac-title-stripes: repeating-linear-gradient(
+    180deg,
+    #000000 0,
+    #000000 1px,
+    #ffffff 1px,
+    #ffffff 3px
+  );
+  --wt-titlebar-pad-y: 4px;
+  --wt-titlebar-pad-x: 2px;
+  /* Sombra derecha/abajo (borde más grueso) */
+  --wt-mac-window-shadow: 2px;
+  --wt-tree-folder-closed: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='14' viewBox='0 0 16 14'%3E%3Cpath fill='none' stroke='%23000' stroke-width='1' d='M1 4V12H14V4H8L6 2H1Z'/%3E%3C/svg%3E");
+  --wt-tree-folder-inverted: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='14' viewBox='0 0 16 14'%3E%3Cpath fill='none' stroke='%23ffffff' stroke-width='1' d='M1 4V12H14V4H8L6 2H1Z'/%3E%3C/svg%3E");
+  --wt-select-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='7' height='5' viewBox='0 0 7 5'%3E%3Cpath d='M0 0 H7 L3.5 4 Z' fill='%23000'/%3E%3C/svg%3E");
+  --wt-scrollbar-arrow-up: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M4 1 L7 5 H1 Z' fill='none' stroke='%23000' stroke-width='1'/%3E%3C/svg%3E");
+  --wt-scrollbar-arrow-down: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M1 3 H7 L4 7 Z' fill='none' stroke='%23000' stroke-width='1'/%3E%3C/svg%3E");
+  --wt-scrollbar-arrow-left: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M1 4 L5 1 V7 Z' fill='none' stroke='%23000' stroke-width='1'/%3E%3C/svg%3E");
+  --wt-scrollbar-arrow-right: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M3 1 H7 V7 L3 4 Z' fill='none' stroke='%23000' stroke-width='1'/%3E%3C/svg%3E");
+}
+
+/* Shell: layout, árbol, controles */
+[data-visual-theme="mac-classic-ii"] body {
+  font-family: var(--wt-font);
+  font-size: 14px;
+  font-weight: var(--wt-mac-font-weight);
+  line-height: 1.2;
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: unset;
+}
+
+[data-visual-theme="mac-classic-ii"] .app,
+[data-visual-theme="mac-classic-ii"] .app .retro-window,
+[data-visual-theme="mac-classic-ii"] .app button,
+[data-visual-theme="mac-classic-ii"] .app input,
+[data-visual-theme="mac-classic-ii"] .app select,
+[data-visual-theme="mac-classic-ii"] .app textarea,
+[data-visual-theme="mac-classic-ii"] .app .browser,
+[data-visual-theme="mac-classic-ii"] .app .test-runner,
+[data-visual-theme="mac-classic-ii"] .app .admin-panel,
+[data-visual-theme="mac-classic-ii"] .app .logs-content,
+[data-visual-theme="mac-classic-ii"] .app .log-entry,
+[data-visual-theme="mac-classic-ii"] .app .frame-counter {
+  font-family: var(--wt-font) !important;
+  font-size: 14px;
+  font-weight: var(--wt-mac-font-weight);
+}
+
+[data-visual-theme="mac-classic-ii"] .app {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 0;
+  gap: 0;
+  background: transparent;
+  min-height: 100%;
+  min-width: 0;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .mac-app-windows {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 8px;
+  min-height: 0;
+  min-width: 0;
+}
+
+/* —— Program Manager window (sidebar + content) —— */
+/* Marco triple W3.x: negro exterior → gris → negro interior (mismo grosor) → contenido */
+[data-visual-theme="mac-classic-ii"] .app .retro-window {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  box-sizing: border-box;
+  border: var(--wt-frame-line) solid #000000;
+  padding: var(--wt-frame-band);
+  background: var(--wt-frame);
+  box-shadow: none;
+}
+
+/* Cortes en el marco gris (esquinas + alineados al header) */
+[data-visual-theme="mac-classic-ii"] .app .retro-window-marks {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-window-marks > span {
+  position: absolute;
+  display: block;
+  background: #000000;
+}
+
+/* Tramo del marco en el lateral (cruza borde negro + gris + borde interior) */
+[data-visual-theme="mac-classic-ii"] .app .retro-mark-side-rail-tl {
+  top: calc(var(--wt-frame-mark-line) - var(--wt-frame-tick) + var(--wt-frame-mark-nudge-y));
+  left: 0;
+  width: var(--wt-frame-rail-len);
+  height: var(--wt-frame-tick);
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-mark-side-rail-tr {
+  top: calc(var(--wt-frame-mark-line) - var(--wt-frame-tick) + var(--wt-frame-mark-nudge-y));
+  right: 0;
+  width: var(--wt-frame-rail-len);
+  height: var(--wt-frame-tick);
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-mark-side-rail-bl {
+  bottom: calc(var(--wt-frame-mark-line) - var(--wt-frame-tick) + var(--wt-frame-mark-nudge-bottom));
+  left: 0;
+  width: var(--wt-frame-rail-len);
+  height: var(--wt-frame-tick);
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-mark-side-rail-br {
+  bottom: calc(var(--wt-frame-mark-line) - var(--wt-frame-tick) + var(--wt-frame-mark-nudge-bottom));
+  right: 0;
+  width: var(--wt-frame-rail-len);
+  height: var(--wt-frame-tick);
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-mark-top-rail-tl {
+  top: 0;
+  left: calc(var(--wt-frame-mark-line) - var(--wt-frame-tick) + var(--wt-frame-mark-nudge-x));
+  width: var(--wt-frame-tick);
+  height: var(--wt-frame-rail-len);
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-mark-top-rail-tr {
+  top: 0;
+  right: calc(var(--wt-frame-mark-line) - var(--wt-frame-tick) + var(--wt-frame-mark-nudge-x));
+  width: var(--wt-frame-tick);
+  height: var(--wt-frame-rail-len);
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-mark-bottom-rail-bl {
+  bottom: 0;
+  left: calc(var(--wt-frame-mark-line) - var(--wt-frame-tick) + var(--wt-frame-mark-nudge-bottom));
+  width: var(--wt-frame-tick);
+  height: var(--wt-frame-rail-len);
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-mark-bottom-rail-br {
+  bottom: 0;
+  right: calc(var(--wt-frame-mark-line) - var(--wt-frame-tick) + var(--wt-frame-mark-nudge-bottom));
+  width: var(--wt-frame-tick);
+  height: var(--wt-frame-rail-len);
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-window-inner {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  box-sizing: border-box;
+  border: var(--wt-frame-line) solid #000000;
+  background: transparent;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-window-chrome {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  background: #ffffff;
+  overflow: visible;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-sidebar {
+  width: 320px;
+  flex-shrink: 0;
+  max-height: calc(100vh - 16px);
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-content {
+  flex: 1;
+  min-width: 0;
+  max-height: calc(100vh - 16px);
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-window-titlebar {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: stretch;
+  gap: 0;
+  padding: var(--wt-titlebar-pad-y) var(--wt-titlebar-pad-x);
+  box-sizing: border-box;
+  height: calc(var(--wt-titlebar-height) + var(--wt-titlebar-pad-y) * 2);
+  min-height: calc(var(--wt-titlebar-height) + var(--wt-titlebar-pad-y) * 2);
+  max-height: calc(var(--wt-titlebar-height) + var(--wt-titlebar-pad-y) * 2);
+  background: var(--wt-titlebar-bg);
+  color: var(--wt-titlebar-fg);
+  border-bottom: none;
+  flex-shrink: 0;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-titlebar-leading,
+[data-visual-theme="mac-classic-ii"] .app .retro-titlebar-trailing {
+  display: flex;
+  align-items: stretch;
+  flex-shrink: 0;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-titlebar-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  overflow: hidden;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-window-titlebar::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  height: var(--wt-frame-line);
+  background: #000000;
+  pointer-events: none;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-window-title {
+  display: block;
+  max-width: 100%;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-title-controls {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  flex-shrink: 0;
+  height: 100%;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-title-controls-split {
+  flex-shrink: 0;
+  align-self: stretch;
+  width: var(--wt-frame-line);
+  background: #000000;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-window-titlebar .retro-title-btn {
+  align-self: stretch;
+  width: var(--wt-title-btn-size);
+  min-width: var(--wt-title-btn-size);
+  min-height: 100%;
+  height: 100%;
+  padding: 0;
+  font-size: 8px;
+  line-height: 1;
+  color: #000;
+  background: var(--wt-bevel-mid);
+  border: 2px solid;
+  border-color: var(--wt-bevel-light) var(--wt-bevel-dark) var(--wt-bevel-dark) var(--wt-bevel-light);
+  border-radius: 0;
+  box-shadow: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  cursor: default;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-window-titlebar .retro-title-btn:hover {
+  background: var(--wt-bevel-mid);
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-window-titlebar .retro-title-btn:active:not(:disabled) {
+  padding: 0;
+  border-color: var(--wt-bevel-dark) var(--wt-bevel-light) var(--wt-bevel-light) var(--wt-bevel-dark);
+}
+
+/* Iconos de titlebar (Program Manager / W3.x) */
+[data-visual-theme="mac-classic-ii"] .app .retro-title-icon {
+  display: block;
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-window-titlebar .retro-title-sys {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-title-icon-sys {
+  width: 12px;
+  height: 5px;
+  box-sizing: border-box;
+  background: var(--wt-bevel-mid);
+  border: 2px solid #000000;
+  margin: 0;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-title-icon-down,
+[data-visual-theme="mac-classic-ii"] .app .retro-title-icon-up {
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-title-icon-down {
+  border-top: 5px solid #000000;
+  margin-top: 1px;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-title-icon-up {
+  border-bottom: 5px solid #000000;
+  margin-bottom: 1px;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-menu-bar {
+  display: flex;
+  gap: 12px;
+  padding: 4px 6px 3px;
+  font-size: 12px;
+  background: #ffffff;
+  color: #000;
+  border-bottom: var(--wt-frame-line) solid #000000;
+  flex-shrink: 0;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-menu-bar u {
+  text-decoration: underline;
+  text-underline-offset: 1px;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-window-client {
+  flex: 1;
+  overflow: auto;
+  background-color: #ffffff;
+  padding: 8px;
+  min-height: 0;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-window-client.has-vertical-scrollbar {
+  background-image: linear-gradient(#000000, #000000);
+  background-size: var(--wt-frame-line) 100%;
+  background-position: right var(--wt-scrollbar-size) top;
+  background-repeat: no-repeat;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .content-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 100%;
+}
+
+/* —— Tree inside sidebar window —— */
+[data-visual-theme="mac-classic-ii"] .app .retro-nav {
+  margin: 0 0 8px;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .tree-nav {
+  margin: 0;
+  padding: 0;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .tree-panel {
+  background: transparent;
+  border: none;
+  padding: 4px 2px 6px 0;
+  min-height: 120px;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .tree-group {
+  list-style: none;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .tree-folder {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 4px;
+  font-size: 12px;
+  color: #000;
+  user-select: none;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .tree-folder-icon {
+  width: 16px;
+  height: 14px;
+  flex-shrink: 0;
+  border: none;
+  background-color: transparent;
+  background-image: var(--wt-tree-folder-closed);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 16px 14px;
+  image-rendering: auto;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .tree-children {
+  list-style: none;
+  margin: 0 0 2px 10px;
+  padding: 0 0 0 14px;
+  border-left: 1px solid #000;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .tree-branch {
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .tree-branch::before {
+  content: "";
+  position: absolute;
+  left: -14px;
+  top: 11px;
+  width: 14px;
+  height: 0;
+  border-top: 1px solid #000;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .tree-branch.is-last::after {
+  content: "";
+  position: absolute;
+  left: -15px;
+  top: 12px;
+  bottom: -4px;
+  width: 1px;
+  background: #fff;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .tree-leaf {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  text-align: left;
+  padding: 1px 4px;
+  margin: 1px 0;
+  border: 1px solid transparent;
+  background: transparent;
+  box-shadow: none;
+  min-height: 20px;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .tree-leaf-icon {
+  width: 16px;
+  height: 14px;
+  flex-shrink: 0;
+  border: none;
+  background-color: transparent;
+  background-image: var(--wt-tree-folder-closed);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 16px 14px;
+  image-rendering: auto;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .tree-leaf.active {
+  border: none;
+  outline: none;
+  box-shadow: none;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .tree-leaf:hover {
+  background: transparent;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-window-client .form-group label {
+  font-size: 12px;
+  font-weight: var(--wt-mac-font-weight);
+  color: #000;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .main-nav:not(.tree-nav) .nav-btn {
+  border: none;
+  background: transparent;
+  color: #000;
+  font-size: 12px;
+  padding: 2px 8px;
+  min-height: auto;
+  box-shadow: none;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .main-nav:not(.tree-nav) .nav-btn.active {
+  background: var(--wt-titlebar-bg);
+  color: var(--wt-titlebar-fg);
+  border: none;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .session-info {
+  border: 2px solid;
+  border-color: var(--wt-bevel-dark) var(--wt-bevel-light) var(--wt-bevel-light) var(--wt-bevel-dark);
+  background: #fff;
+  border-radius: 0;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .section-label {
+  margin: 0;
+  padding: 6px 0 2px;
+  font-size: 12px;
+  font-weight: var(--wt-mac-font-weight);
+  text-align: left;
+  color: #000;
+  background: transparent;
+  border: none;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .browser-section,
+[data-visual-theme="mac-classic-ii"] .app .test-section {
+  border: none;
+  box-shadow: none;
+  background: transparent;
+  padding: 0;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .browser {
+  padding: 8px;
+  gap: 8px;
+  background: var(--wt-bevel-mid);
+}
+
+[data-visual-theme="mac-classic-ii"] .app .canvas-wrapper {
+  border: 2px solid;
+  border-color: var(--wt-bevel-dark) var(--wt-bevel-light) var(--wt-bevel-light) var(--wt-bevel-dark);
+  border-radius: 0;
+  box-shadow: none;
+  background: #fff;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .logs {
+  border: 2px solid;
+  border-color: var(--wt-bevel-dark) var(--wt-bevel-light) var(--wt-bevel-light) var(--wt-bevel-dark);
+  border-radius: 0;
+  box-shadow: none;
+  background: #fff;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .logs-header {
+  background: var(--wt-bevel-mid);
+  border-bottom: 1px solid var(--wt-bevel-dark);
+  font-size: 12px;
+  font-weight: var(--wt-mac-font-weight);
+}
+
+[data-visual-theme="mac-classic-ii"] .app .test-runner,
+[data-visual-theme="mac-classic-ii"] .app .admin-panel {
+  border-radius: 0;
+  box-shadow: none;
+  border: 2px solid;
+  border-color: var(--wt-bevel-dark) var(--wt-bevel-light) var(--wt-bevel-light) var(--wt-bevel-dark);
+  background: #fff;
+  margin: 0 0 8px;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .test-editor h3,
+[data-visual-theme="mac-classic-ii"] .app .test-logs h3,
+[data-visual-theme="mac-classic-ii"] .app .admin-panel h2 {
+  font-size: 12px;
+  font-weight: var(--wt-mac-font-weight);
+  color: #000;
+  background: var(--wt-bevel-mid);
+  margin: -16px -16px 8px;
+  padding: 4px 8px;
+  border-bottom: 1px solid var(--wt-bevel-dark);
+}
+
+[data-visual-theme="mac-classic-ii"] .app .test-editor textarea,
+[data-visual-theme="mac-classic-ii"] .app .test-logs .logs-content {
+  border: 2px solid;
+  border-color: var(--wt-bevel-dark) var(--wt-bevel-light) var(--wt-bevel-light) var(--wt-bevel-dark);
+  border-radius: 0;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .test-result {
+  border-radius: 0;
+  border: 2px solid var(--wt-bevel-shadow);
+}
+
+[data-visual-theme="mac-classic-ii"] .app .empty-hint {
+  border: none;
+  background: transparent;
+  margin: 0;
+  padding: 12px 0;
+}
+
+/* —— Controls: botones diálogo Mac (pastilla); detalle en bloque shell al final —— */
+
+[data-visual-theme="mac-classic-ii"] .app button.tree-leaf {
+  border: 1px solid transparent;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .main-nav:not(.tree-nav) .nav-btn {
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+[data-visual-theme="mac-classic-ii"] .app button.tree-leaf:active:not(:disabled),
+[data-visual-theme="mac-classic-ii"] .app .retro-combo-btn:active:not(:disabled) {
+  padding: 0;
+}
+
+[data-visual-theme="mac-classic-ii"] .app button.tree-leaf:active:not(:disabled) {
+  padding: 1px 4px;
+  border-color: transparent;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .stop-btn,
+[data-visual-theme="mac-classic-ii"] .app .stop-test-btn {
+  color: #000000;
+  font-weight: var(--wt-mac-font-weight);
+}
+
+[data-visual-theme="mac-classic-ii"] .app input:not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not([type="file"]),
+[data-visual-theme="mac-classic-ii"] .app textarea {
+  box-sizing: border-box;
+  min-height: 22px;
+  padding: 2px 6px;
+  font-size: 12px;
+  line-height: 1.2;
+  color: #000000;
+  border: none;
+  border-radius: 0;
+  box-shadow: 0 0 0 var(--wt-control-outline) #000000;
+  background-color: #ffffff;
+}
+
+[data-visual-theme="mac-classic-ii"] .app input:not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not([type="file"]):focus,
+[data-visual-theme="mac-classic-ii"] .app textarea:focus {
+  outline: 1px dotted #000000;
+  outline-offset: -3px;
+}
+
+[data-visual-theme="mac-classic-ii"] .app input:not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not([type="file"]):disabled,
+[data-visual-theme="mac-classic-ii"] .app textarea:disabled {
+  color: var(--wt-bevel-dark);
+  background-color: var(--wt-bevel-mid);
+}
+
+/* Combo Win 3.11: recuadro sólido + botón biselado fuera a la derecha */
+[data-visual-theme="mac-classic-ii"] .app .retro-combo {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  gap: 0;
+  box-sizing: border-box;
+  /* Contorno negro único alrededor de campo + botón */
+  box-shadow: 0 0 0 var(--wt-control-outline) #000000;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-combo > select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  flex: 1 1 auto;
+  width: auto;
+  min-width: 0;
+  box-sizing: border-box;
+  min-height: 22px;
+  padding: 2px 6px;
+  font-size: 12px;
+  line-height: 1.2;
+  color: #000000;
+  border-radius: 0;
+  border: none;
+  box-shadow: none;
+  background-color: #ffffff;
+  background-image: none;
+  cursor: default;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-combo > select:focus {
+  outline: 1px dotted #000000;
+  outline-offset: -3px;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-combo > select:disabled {
+  color: var(--wt-bevel-dark);
+  background-color: var(--wt-bevel-mid);
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-combo-split {
+  display: none;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-combo-btn {
+  display: block;
+  flex: 0 0 var(--wt-select-btn);
+  box-sizing: border-box;
+  min-height: 22px;
+  margin: 0;
+  padding: 0;
+  border: 2px solid;
+  border-color: var(--wt-bevel-light) var(--wt-bevel-dark) var(--wt-bevel-dark) var(--wt-bevel-light);
+  border-radius: 1px;
+  box-shadow: none;
+  background-color: var(--wt-bevel-mid);
+  background-image: var(--wt-select-arrow);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 7px 10px;
+  image-rendering: auto;
+  cursor: default;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-combo:has(select:disabled) .retro-combo-btn {
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+/* Sin wrapper: aspecto básico (otros temas / legacy) */
+[data-visual-theme="mac-classic-ii"] .app select:not(.retro-combo > select) {
+  appearance: none;
+  -webkit-appearance: none;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 22px;
+  border: none;
+  border-radius: 0;
+  box-shadow: 0 0 0 var(--wt-control-outline) #000000;
+  background-color: #ffffff;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .frame-counter,
+[data-visual-theme="mac-classic-ii"] .app .screencast-paused {
+  border-radius: 0;
+  font-size: 12px;
+  border: 1px solid #000;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .linkish {
+  color: var(--wt-titlebar-bg);
+  text-decoration: underline;
+}
+
+/* Classic scrollbars (WebKit) */
+[data-visual-theme="mac-classic-ii"] .app ::-webkit-scrollbar {
+  width: var(--wt-scrollbar-size);
+  height: var(--wt-scrollbar-size);
+  background: var(--wt-bevel-mid);
+}
+
+[data-visual-theme="mac-classic-ii"] .app ::-webkit-scrollbar-track:vertical {
+  background-color: var(--wt-bevel-mid);
+  border-top: var(--wt-frame-line) solid #000000;
+  border-bottom: var(--wt-frame-line) solid #000000;
+}
+
+[data-visual-theme="mac-classic-ii"] .app ::-webkit-scrollbar-track:horizontal {
+  background-color: var(--wt-bevel-mid);
+  border-left: var(--wt-frame-line) solid #000000;
+  border-right: var(--wt-frame-line) solid #000000;
+}
+
+[data-visual-theme="mac-classic-ii"] .app ::-webkit-scrollbar-thumb {
+  background: var(--wt-bevel-mid);
+  border: 2px solid;
+  border-color: var(--wt-bevel-light) var(--wt-bevel-dark) var(--wt-bevel-dark) var(--wt-bevel-light);
+}
+
+[data-visual-theme="mac-classic-ii"] .app ::-webkit-scrollbar-button {
+  background-color: var(--wt-bevel-mid);
+  background-repeat: no-repeat;
+  background-position: center;
+  image-rendering: auto;
+  border: 2px solid;
+  border-color: var(--wt-bevel-light) var(--wt-bevel-dark) var(--wt-bevel-dark) var(--wt-bevel-light);
+  height: 16px;
+  width: 16px;
+}
+
+[data-visual-theme="mac-classic-ii"] .app ::-webkit-scrollbar-button:vertical:decrement {
+  background-image: var(--wt-scrollbar-arrow-up);
+}
+
+[data-visual-theme="mac-classic-ii"] .app ::-webkit-scrollbar-button:vertical:increment {
+  background-image: var(--wt-scrollbar-arrow-down);
+}
+
+[data-visual-theme="mac-classic-ii"] .app ::-webkit-scrollbar-button:horizontal:decrement {
+  background-image: var(--wt-scrollbar-arrow-left);
+}
+
+[data-visual-theme="mac-classic-ii"] .app ::-webkit-scrollbar-button:horizontal:increment {
+  background-image: var(--wt-scrollbar-arrow-right);
+}
+
+/* Marco negro + superficie redondeada (tramado dentro de .mac-page-surface) */
+html[data-visual-theme="mac-classic-ii"] {
+  min-height: 100%;
+  background-color: #000000;
+}
+
+html[data-visual-theme="mac-classic-ii"]::before {
+  display: none;
+}
+
+html[data-visual-theme="mac-classic-ii"],
+html[data-visual-theme="mac-classic-ii"] body {
+  height: 100%;
+  min-height: 100%;
+  background-color: #000000;
+}
+
+html[data-visual-theme="mac-classic-ii"] #root {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: var(--wt-mac-page-frame-pad);
+  background-color: #000000;
+}
+
+[data-visual-theme="mac-classic-ii"] .mac-page-frame {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  box-sizing: border-box;
+}
+
+[data-visual-theme="mac-classic-ii"] .mac-page-surface {
+  position: relative;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  border-radius: var(--wt-mac-page-surface-radius);
+  overflow: hidden;
+  background-color: var(--wt-mac-dither-base);
+  box-sizing: border-box;
+}
+
+[data-visual-theme="mac-classic-ii"] .mac-page-surface::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background-color: var(--wt-mac-dither-base);
+  background-image: var(--wt-mac-dither);
+  background-size: var(--wt-mac-dither-size) var(--wt-mac-dither-size);
+  background-position: var(--wt-mac-dither-position);
+  background-repeat: repeat;
+  filter: blur(var(--wt-mac-dither-blur));
+  transform: scale(1.015);
+  transform-origin: center;
+}
+
+[data-visual-theme="mac-classic-ii"] .mac-page-surface > .app {
+  position: relative;
+  z-index: 1;
+  flex: 1 1 auto;
+  min-height: 0;
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+}
+
+html[data-visual-theme="mac-classic-ii"] body,
+[data-visual-theme="mac-classic-ii"] .app,
+[data-visual-theme="mac-classic-ii"] .app .mac-app-windows {
+  position: relative;
+  z-index: 1;
+  background: transparent;
+}
+
+[data-visual-theme="mac-classic-ii"] body,
+[data-visual-theme="mac-classic-ii"] .app {
+  font-family: var(--wt-font);
+  font-size: 14px;
+  font-weight: var(--wt-mac-font-weight);
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: unset;
+  font-smooth: never;
+}
+
+[data-visual-theme="mac-classic-ii"] .app {
+  flex-direction: column !important;
+  gap: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+[data-visual-theme="mac-classic-ii"] .mac-screen-menu-bar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+  width: 100%;
+  min-height: 20px;
+  padding: 2px 10px 3px;
+  box-sizing: border-box;
+  background: #ffffff;
+  border-bottom: 1px solid #000000;
+  font-family: var(--wt-font);
+  font-size: 14px;
+  font-weight: var(--wt-mac-font-weight-strong);
+  line-height: 1.2;
+  color: #000000;
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: unset;
+}
+
+[data-visual-theme="mac-classic-ii"] .mac-screen-menu-bar .mac-menu-items {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+[data-visual-theme="mac-classic-ii"] .mac-menu-apple {
+  display: block;
+  width: 10px;
+  height: 12px;
+  flex-shrink: 0;
+  background-color: #000000;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 14'%3E%3Cpath d='M9.2 1.1c.6.7 1 1.7.9 2.7-.9 0-1.8-.5-2.4-1.2-.6-.7-1.1-1.7-.9-2.7.9.1 1.8.6 2.4 1.2zm2.5 9.4c-.6.9-1.3 1.8-2.3 1.8-1 0-1.3-.6-2.4-.6-1.1 0-1.5.6-2.5.6-1 0-1.9-.9-2.5-1.8C1.2 9.2.5 6.8 1.6 4.9c.7-1.2 1.9-2 3.2-2 .9 0 1.7.6 2.4.6.7 0 1.6-.7 2.7-.7.5 0 2 .2 2.9 1.5-2.5 1.4-2.1 5.1.7 6.2z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 14'%3E%3Cpath d='M9.2 1.1c.6.7 1 1.7.9 2.7-.9 0-1.8-.5-2.4-1.2-.6-.7-1.1-1.7-.9-2.7.9.1 1.8.6 2.4 1.2zm2.5 9.4c-.6.9-1.3 1.8-2.3 1.8-1 0-1.3-.6-2.4-.6-1.1 0-1.5.6-2.5.6-1 0-1.9-.9-2.5-1.8C1.2 9.2.5 6.8 1.6 4.9c.7-1.2 1.9-2 3.2-2 .9 0 1.7.6 2.4.6.7 0 1.6-.7 2.7-.7.5 0 2 .2 2.9 1.5-2.5 1.4-2.1 5.1.7 6.2z'/%3E%3C/svg%3E");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .mac-app-windows {
+  gap: 12px;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+/* ========== Mac Classic (pisa shell Win311 portado — usar .app …) ========== */
+
+[data-visual-theme="mac-classic-ii"] .app .retro-window {
+  border: none;
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-window-marks {
+  display: none !important;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-window-inner {
+  border: solid #000000;
+  border-width: 1px var(--wt-mac-window-shadow) var(--wt-mac-window-shadow) 1px;
+  background: #ffffff;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-window-chrome {
+  background: #ffffff;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-sidebar,
+[data-visual-theme="mac-classic-ii"] .app .retro-content {
+  max-height: none;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-window-titlebar {
+  align-items: center;
+  box-sizing: border-box;
+  padding: var(--wt-titlebar-pad-y) var(--wt-titlebar-pad-x);
+  height: calc(var(--wt-titlebar-height) + var(--wt-titlebar-pad-y) * 2);
+  min-height: calc(var(--wt-titlebar-height) + var(--wt-titlebar-pad-y) * 2);
+  max-height: calc(var(--wt-titlebar-height) + var(--wt-titlebar-pad-y) * 2);
+  background-color: #ffffff;
+  background-image: var(--wt-mac-title-stripes);
+  background-origin: content-box;
+  background-clip: content-box;
+  background-size: 100% var(--wt-mac-title-stripe-period);
+  background-repeat: repeat-y;
+  background-position: 0 var(--wt-mac-title-stripe-offset-y);
+  color: #000000;
+  border-bottom: 1px solid #000000;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-window-titlebar::after {
+  display: none;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-titlebar-leading {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  margin-left: var(--wt-mac-close-offset-x);
+  background: transparent;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-titlebar-leading::before,
+[data-visual-theme="mac-classic-ii"] .app .retro-titlebar-leading::after {
+  content: "";
+  display: block;
+  width: var(--wt-mac-close-inline-gap);
+  align-self: stretch;
+  flex-shrink: 0;
+  background-color: #ffffff;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-titlebar-trailing {
+  align-items: center;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-titlebar-trailing-spacer {
+  display: block;
+  width: var(--wt-title-btn-size);
+  height: var(--wt-title-btn-size);
+  flex-shrink: 0;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-title-controls-split {
+  display: none;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-window-title {
+  font-family: var(--wt-font) !important;
+  font-weight: var(--wt-mac-font-weight-strong);
+  font-size: 14px;
+  line-height: 1.2;
+  background: #ffffff;
+  padding: 1px 12px 2px;
+  color: #000000;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-window-titlebar .retro-title-btn {
+  width: var(--wt-title-btn-size);
+  min-width: var(--wt-title-btn-size);
+  height: var(--wt-title-btn-size);
+  min-height: var(--wt-title-btn-size);
+  max-height: var(--wt-title-btn-size);
+  align-self: center;
+  margin: 0;
+  background: #ffffff;
+  border: 1px solid #000000;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-window-titlebar .retro-title-btn.retro-title-sys {
+  align-self: center;
+  width: var(--wt-mac-close-size);
+  min-width: var(--wt-mac-close-size);
+  height: var(--wt-mac-close-size);
+  min-height: var(--wt-mac-close-size);
+  max-height: var(--wt-mac-close-size);
+  margin: 0;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-menu-bar {
+  display: none !important;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-window-client {
+  background: #ffffff;
+  border: none;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-window-client.has-vertical-scrollbar {
+  background-image: none;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .tree-panel {
+  border: none;
+  box-shadow: none;
+  background: #ffffff;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .tree-leaf.active {
+  gap: 4px;
+  width: 100%;
+  padding: 1px 4px !important;
+  margin: 1px 0;
+  background: #000000 !important;
+  color: #ffffff !important;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .tree-leaf.active .tree-leaf-label {
+  background: transparent;
+  color: #ffffff;
+  padding: 0;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .tree-leaf.active .tree-leaf-icon {
+  background-color: transparent;
+  background-image: var(--wt-tree-folder-inverted);
+  filter: none;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .tree-folder-icon,
+[data-visual-theme="mac-classic-ii"] .app .tree-leaf-icon {
+  image-rendering: auto;
+}
+
+[data-visual-theme="mac-classic-ii"] .app button.tree-leaf {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 4px;
+  width: 100%;
+  min-height: 20px;
+  padding: 1px 4px !important;
+  font-size: 12px;
+  line-height: 1.2;
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+[data-visual-theme="mac-classic-ii"] .app button.tree-leaf.active:hover:not(:disabled) {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border-color: transparent !important;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .browser,
+[data-visual-theme="mac-classic-ii"] .app .test-runner,
+[data-visual-theme="mac-classic-ii"] .app .admin-panel,
+[data-visual-theme="mac-classic-ii"] .app .logs {
+  border: 1px solid #000000;
+  border-radius: 0;
+  box-shadow: none;
+  background: #ffffff;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .admin-panel {
+  padding: 12px 14px 14px;
+  margin: 0;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .admin-panel h2 {
+  margin: 0 0 12px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  font-size: 14px;
+  font-weight: var(--wt-mac-font-weight-strong);
+  color: #000000;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .admin-panel h3.section-label,
+[data-visual-theme="mac-classic-ii"] .app .admin-panel .section-label {
+  margin: 0 0 4px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  font-size: 12px;
+  font-weight: var(--wt-mac-font-weight);
+  color: #000000;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .admin-panel .muted {
+  margin: 0 0 8px;
+  font-size: 12px;
+  color: #000000;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .admin-panel-divider {
+  border: none;
+  border-top: 1px solid #000000;
+  margin: 14px 0;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .admin-panel .form-group {
+  margin-bottom: 10px;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .admin-panel .form-group label {
+  font-size: 12px;
+  color: #000000;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .admin-panel .form-group input {
+  width: 100%;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .admin-panel-actions {
+  gap: 10px;
+  margin: 6px 0 4px;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .admin-panel .status-line {
+  font-size: 12px;
+  margin: 6px 0 0;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .admin-file-input {
+  font-size: 12px;
+  gap: 6px;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .admin-file-input input[type="file"] {
+  border: 1px solid #000000;
+  background: #ffffff;
+  padding: 2px 4px;
+  font-family: var(--wt-font) !important;
+  font-size: 12px;
+}
+
+[data-visual-theme="mac-classic-ii"] .app button:not(.retro-combo-btn):not(.retro-title-btn):not(.tree-leaf):not(.nav-btn):not(.linkish) {
+  box-sizing: border-box;
+  display: inline-block;
+  min-height: 18px;
+  margin: 2px 4px;
+  padding: var(--wt-mac-btn-pad-y) var(--wt-mac-btn-pad-x);
+  font-family: var(--wt-font) !important;
+  font-size: 14px;
+  line-height: 1.2;
+  font-weight: var(--wt-mac-font-weight);
+  color: #000000;
+  background: #ffffff;
+  border: 1px solid #000000;
+  border-radius: var(--wt-mac-btn-radius);
+  box-shadow: none;
+  transition: none;
+  cursor: default;
+}
+
+[data-visual-theme="mac-classic-ii"] .app button.mac-btn-default:not(.tree-leaf):not(.nav-btn):not(.linkish),
+[data-visual-theme="mac-classic-ii"] .app button[type="submit"]:not(.tree-leaf):not(.nav-btn):not(.linkish) {
+  box-shadow:
+    0 0 0 1px #ffffff,
+    0 0 0 4px #000000;
+  margin: 3px 5px;
+}
+
+[data-visual-theme="mac-classic-ii"] .app button:not(.retro-combo-btn):not(.retro-title-btn):not(.tree-leaf):not(.nav-btn):not(.linkish):hover:not(:disabled),
+[data-visual-theme="mac-classic-ii"] .app button:not(.retro-combo-btn):not(.retro-title-btn):not(.tree-leaf):not(.nav-btn):not(.linkish):active:not(:disabled) {
+  background: #ffffff;
+  color: #000000;
+  border: 1px solid #000000;
+}
+
+[data-visual-theme="mac-classic-ii"] .app button.mac-btn-default:not(.tree-leaf):not(.nav-btn):not(.linkish):hover:not(:disabled),
+[data-visual-theme="mac-classic-ii"] .app button.mac-btn-default:not(.tree-leaf):not(.nav-btn):not(.linkish):active:not(:disabled),
+[data-visual-theme="mac-classic-ii"] .app button[type="submit"]:not(.tree-leaf):not(.nav-btn):not(.linkish):hover:not(:disabled),
+[data-visual-theme="mac-classic-ii"] .app button[type="submit"]:not(.tree-leaf):not(.nav-btn):not(.linkish):active:not(:disabled) {
+  box-shadow:
+    0 0 0 1px #ffffff,
+    0 0 0 4px #000000;
+}
+
+[data-visual-theme="mac-classic-ii"] .app button:not(.retro-combo-btn):not(.retro-title-btn):not(.tree-leaf):not(.nav-btn):not(.linkish):disabled {
+  color: #000000;
+  background: #ffffff;
+  border: 1px solid #000000;
+  opacity: 0.45;
+}
+
+[data-visual-theme="mac-classic-ii"] .app button.linkish {
+  margin: 0;
+  padding: 0 2px;
+  min-height: auto;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  color: #000000;
+  text-decoration: underline;
+  text-underline-offset: 1px;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .sidebar > button:not(.nav-btn):not(.tree-leaf) {
+  width: auto;
+  max-width: 100%;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .test-actions {
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .test-actions button {
+  flex: 0 1 auto;
+  width: auto;
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: 1px solid #000000 !important;
+  border-radius: var(--wt-mac-btn-radius) !important;
+  cursor: default;
+  transition: none;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .test-actions button:hover:not(:disabled),
+[data-visual-theme="mac-classic-ii"] .app .test-actions button:disabled {
+  background: #ffffff !important;
+  color: #000000 !important;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .stop-btn,
+[data-visual-theme="mac-classic-ii"] .app .stop-test-btn,
+[data-visual-theme="mac-classic-ii"] .app .stop-btn:hover,
+[data-visual-theme="mac-classic-ii"] .app .stop-test-btn:hover {
+  background: #ffffff !important;
+  color: #000000 !important;
+}
+
+[data-visual-theme="mac-classic-ii"] .app input:not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not([type="file"]),
+[data-visual-theme="mac-classic-ii"] .app textarea {
+  border: 1px solid #000000;
+  box-shadow: none;
+  background: #ffffff;
+}
+
+[data-visual-theme="mac-classic-ii"] .app input:not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not([type="file"]):disabled,
+[data-visual-theme="mac-classic-ii"] .app textarea:disabled {
+  color: #000000;
+  background-color: #ffffff;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-combo {
+  box-shadow: none;
+  border: 1px solid #000000;
+  background: #ffffff;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-combo > select {
+  border: none;
+  box-shadow: none;
+  background: #ffffff;
+}
+
+[data-visual-theme="mac-classic-ii"] .app select,
+[data-visual-theme="mac-classic-ii"] .app .retro-combo > select {
+  accent-color: #000000 !important;
+  color-scheme: only light;
+}
+
+[data-visual-theme="mac-classic-ii"] .app select:focus,
+[data-visual-theme="mac-classic-ii"] .app .retro-combo > select:focus {
+  border-color: #000000 !important;
+}
+
+[data-visual-theme="mac-classic-ii"] .app select option {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+[data-visual-theme="mac-classic-ii"] .app select option:checked,
+[data-visual-theme="mac-classic-ii"] .app select option[selected] {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+[data-visual-theme="mac-classic-ii"] .app select option:hover,
+[data-visual-theme="mac-classic-ii"] .app select option:focus-visible,
+[data-visual-theme="mac-classic-ii"] .app select option:active {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-combo-split {
+  display: none;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-combo-btn {
+  border: none;
+  border-left: 1px solid #000000;
+  border-radius: 0;
+  box-shadow: none;
+  background-color: #ffffff;
+  background-image: var(--wt-select-arrow);
+  background-size: 7px 5px;
+}
+
+[data-visual-theme="mac-classic-ii"] .app .retro-combo > select:disabled {
+  background-color: #ffffff;
+  background-image: none;
+}
+
+
+[data-visual-theme="mac-classic-ii"] .app .session-info,
+[data-visual-theme="mac-classic-ii"] .app .section-label {
+  background: transparent;
+  border: none;
+  font-weight: var(--wt-mac-font-weight);
+}
+
+[data-visual-theme="mac-classic-ii"] .app .test-result {
+  border: 1px solid #000000;
+  box-shadow: none;
+}
+
+/* Handjet 500 en el shell Mac; menú superior y títulos de ventana a 800 */
+html[data-visual-theme="mac-classic-ii"] .app,
+html[data-visual-theme="mac-classic-ii"] .app *:not(.retro-window-title) {
+  font-weight: var(--wt-mac-font-weight) !important;
+}
+
+html[data-visual-theme="mac-classic-ii"] .mac-screen-menu-bar,
+html[data-visual-theme="mac-classic-ii"] .mac-screen-menu-bar *:not(.mac-menu-apple) {
+  font-weight: var(--wt-mac-font-weight-strong) !important;
+}
+
+html[data-visual-theme="mac-classic-ii"] .app .retro-window-title {
+  font-weight: var(--wt-mac-font-weight-strong) !important;
+}
+
+[data-visual-theme="mac-classic-ii"] .app ::-webkit-scrollbar {
+  width: var(--wt-scrollbar-size);
+  height: var(--wt-scrollbar-size);
+  background-color: var(--wt-mac-dither-base);
+  background-image: var(--wt-mac-scrollbar-dither);
+  background-size: var(--wt-mac-scrollbar-dither-size) var(--wt-mac-scrollbar-dither-size);
+  background-position: var(--wt-mac-scrollbar-dither-position);
+  background-repeat: repeat;
+}
+
+[data-visual-theme="mac-classic-ii"] .app ::-webkit-scrollbar-track:vertical {
+  background-color: var(--wt-mac-dither-base);
+  background-image: var(--wt-mac-scrollbar-dither);
+  background-size: var(--wt-mac-scrollbar-dither-size) var(--wt-mac-scrollbar-dither-size);
+  background-position: var(--wt-mac-scrollbar-dither-position);
+  background-repeat: repeat;
+  border: none;
+  border-left: 1px solid #000000;
+}
+
+[data-visual-theme="mac-classic-ii"] .app ::-webkit-scrollbar-track:horizontal {
+  background-color: var(--wt-mac-dither-base);
+  background-image: var(--wt-mac-scrollbar-dither);
+  background-size: var(--wt-mac-scrollbar-dither-size) var(--wt-mac-scrollbar-dither-size);
+  background-position: var(--wt-mac-scrollbar-dither-position);
+  background-repeat: repeat;
+  border: 1px solid #000000;
+}
+
+[data-visual-theme="mac-classic-ii"] .app ::-webkit-scrollbar-thumb {
+  background: #ffffff;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+[data-visual-theme="mac-classic-ii"] .app ::-webkit-scrollbar-thumb:vertical {
+  border: none;
+  border-left: 1px solid #000000;
+  border-top: 1px solid #000000;
+  border-bottom: 1px solid #000000;
+}
+
+[data-visual-theme="mac-classic-ii"] .app ::-webkit-scrollbar-button {
+  background: #ffffff;
+  border-radius: 0;
+  box-shadow: none;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+[data-visual-theme="mac-classic-ii"] .app ::-webkit-scrollbar-button:vertical:decrement {
+  border: none;
+  border-left: 1px solid #000000;
+  border-bottom: 1px solid #000000;
+  background-image: var(--wt-scrollbar-arrow-up);
+}
+
+[data-visual-theme="mac-classic-ii"] .app ::-webkit-scrollbar-button:vertical:increment {
+  border: none;
+  border-left: 1px solid #000000;
+  border-top: 1px solid #000000;
+  background-image: var(--wt-scrollbar-arrow-down);
+}
+
+[data-visual-theme="mac-classic-ii"] .app ::-webkit-scrollbar-button:horizontal:decrement {
+  background-image: var(--wt-scrollbar-arrow-left);
+}
+
+[data-visual-theme="mac-classic-ii"] .app ::-webkit-scrollbar-button:horizontal:increment {
+  background-image: var(--wt-scrollbar-arrow-right);
+}
+

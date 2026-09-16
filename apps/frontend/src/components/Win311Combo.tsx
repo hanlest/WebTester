@@ -7,7 +7,7 @@ type Win311ComboProps = ComponentPropsWithoutRef<"select"> & {
 export function Win311Combo({ children, className, ...props }: Win311ComboProps) {
   const openPicker = (e: React.PointerEvent<HTMLSpanElement>) => {
     e.preventDefault();
-    const select = e.currentTarget.closest(".win311-combo")?.querySelector("select");
+    const select = e.currentTarget.closest(".retro-combo")?.querySelector("select");
     if (!(select instanceof HTMLSelectElement) || select.disabled) return;
     if (typeof select.showPicker === "function") {
       select.showPicker();
@@ -17,10 +17,10 @@ export function Win311Combo({ children, className, ...props }: Win311ComboProps)
   };
 
   return (
-    <div className={`win311-combo${className ? ` ${className}` : ""}`}>
+    <div className={`retro-combo${className ? ` ${className}` : ""}`}>
       <select {...props}>{children}</select>
-      <span className="win311-combo-split" aria-hidden />
-      <span className="win311-combo-btn" aria-hidden onPointerDown={openPicker} />
+      <span className="retro-combo-split" aria-hidden />
+      <span className="retro-combo-btn" aria-hidden onPointerDown={openPicker} />
     </div>
   );
 }
