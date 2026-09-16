@@ -5,14 +5,11 @@ import { TestRunner } from "./components/TestRunner";
 import { BACKEND_URL } from "./config";
 import "./App.css";
 
-type Tab = "browser" | "test";
-
 export function App() {
   const [url, setUrl] = useState("https://example.com");
   const [deviceProfile, setDeviceProfile] = useState<DeviceProfile>("desktop");
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState<Tab>("browser");
 
   const handleStart = async () => {
     setLoading(true);
@@ -84,17 +81,15 @@ export function App() {
       <div className="content">
         {sessionId && (
           <>
-            <div className="tabs">
-              <button className={`tab ${activeTab === "browser" ? "active" : ""}`} onClick={() => setActiveTab("browser")}>
-                📹 Live Browser
-              </button>
-              <button className={`tab ${activeTab === "test" ? "active" : ""}`} onClick={() => setActiveTab("test")}>
-                🤖 AI Test
-              </button>
+            <div className="section-label">📹 Live Browser</div>
+            <div className="browser-section">
+              <Browser sessionId={sessionId} />
             </div>
 
-            {activeTab === "browser" && <Browser sessionId={sessionId} />}
-            {activeTab === "test" && <TestRunner sessionId={sessionId} />}
+            <div className="section-label">🤖 AI Test</div>
+            <div className="test-section">
+              <TestRunner sessionId={sessionId} />
+            </div>
           </>
         )}
       </div>
