@@ -3,6 +3,7 @@ import { useState } from "react";
 import { DEVICE_PROFILES } from "@web-tester/shared";
 import { Browser } from "./components/Browser";
 import { TestRunner } from "./components/TestRunner";
+import { BACKEND_URL } from "./config";
 import "./App.css";
 export function App() {
     const [url, setUrl] = useState("https://example.com");
@@ -13,7 +14,7 @@ export function App() {
     const handleStart = async () => {
         setLoading(true);
         try {
-            const res = await fetch("http://localhost:3001/api/session/start", {
+            const res = await fetch(`${BACKEND_URL}/api/session/start`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ url, deviceProfile }),
@@ -38,7 +39,7 @@ export function App() {
         if (!sessionId)
             return;
         try {
-            await fetch(`http://localhost:3001/api/session/${sessionId}/stop`, { method: "POST" });
+            await fetch(`${BACKEND_URL}/api/session/${sessionId}/stop`, { method: "POST" });
             setSessionId(null);
         }
         catch (error) {

@@ -1,5 +1,6 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useEffect, useRef, useState } from "react";
+import { BACKEND_WS_URL } from "../config";
 import "./Browser.css";
 export function Browser({ sessionId }) {
     const canvasRef = useRef(null);
@@ -7,7 +8,7 @@ export function Browser({ sessionId }) {
     const [frameCount, setFrameCount] = useState(0);
     const logsEndRef = useRef(null);
     useEffect(() => {
-        const ws = new WebSocket(`ws://localhost:3001/ws/session/${sessionId}`);
+        const ws = new WebSocket(`${BACKEND_WS_URL}/ws/session/${sessionId}`);
         ws.onopen = () => {
             console.log("WebSocket connected");
             setLogs((prev) => [...prev, { level: "info", message: "WebSocket connected", timestamp: Date.now() }]);

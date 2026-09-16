@@ -105,9 +105,12 @@ app.get("/ws/session/:sessionId", { websocket: true }, async (socket, request) =
 });
 
 const start = async () => {
+  const port = Number(process.env.BACKEND_PORT) || 3001;
+  const host = process.env.BACKEND_HOST || "0.0.0.0";
+
   try {
-    await app.listen({ port: 3001, host: "0.0.0.0" });
-    console.log("Server running on http://localhost:3001");
+    await app.listen({ port, host });
+    console.log(`Server running on http://localhost:${port}`);
   } catch (err) {
     app.log.error(err);
     process.exit(1);

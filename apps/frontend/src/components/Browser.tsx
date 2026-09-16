@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import type { ScreencastFrame, LogMessage } from "@web-tester/shared";
+import { BACKEND_WS_URL } from "../config";
 import "./Browser.css";
 
 interface BrowserProps {
@@ -13,7 +14,7 @@ export function Browser({ sessionId }: BrowserProps) {
   const logsEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const ws = new WebSocket(`ws://localhost:3001/ws/session/${sessionId}`);
+    const ws = new WebSocket(`${BACKEND_WS_URL}/ws/session/${sessionId}`);
 
     ws.onopen = () => {
       console.log("WebSocket connected");

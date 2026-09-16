@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { BACKEND_URL } from "../config";
 import "./TestRunner.css";
 
 interface TestRunnerProps {
@@ -24,7 +25,7 @@ export function TestRunner({ sessionId }: TestRunnerProps) {
     setResult(null);
 
     try {
-      const response = await fetch(`http://localhost:3001/api/session/${sessionId}/test/execute`, {
+      const response = await fetch(`${BACKEND_URL}/api/session/${sessionId}/test/execute`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ testCase }),

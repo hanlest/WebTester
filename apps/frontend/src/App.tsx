@@ -2,6 +2,7 @@ import { useState } from "react";
 import { DEVICE_PROFILES, DeviceProfile } from "@web-tester/shared";
 import { Browser } from "./components/Browser";
 import { TestRunner } from "./components/TestRunner";
+import { BACKEND_URL } from "./config";
 import "./App.css";
 
 type Tab = "browser" | "test";
@@ -16,7 +17,7 @@ export function App() {
   const handleStart = async () => {
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:3001/api/session/start", {
+      const res = await fetch(`${BACKEND_URL}/api/session/start`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ url, deviceProfile }),
@@ -39,7 +40,7 @@ export function App() {
   const handleStop = async () => {
     if (!sessionId) return;
     try {
-      await fetch(`http://localhost:3001/api/session/${sessionId}/stop`, { method: "POST" });
+      await fetch(`${BACKEND_URL}/api/session/${sessionId}/stop`, { method: "POST" });
       setSessionId(null);
     } catch (error) {
       console.error(error);
