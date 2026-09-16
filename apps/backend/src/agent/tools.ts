@@ -3,11 +3,12 @@ import { ToolDefinition } from "../ai/index.js";
 export const AGENT_TOOLS: ToolDefinition[] = [
   {
     name: "navigate",
-    description: "Navigate to a URL in the browser",
+    description:
+      "Navigate the browser to a specific URL. Only use this if the test case explicitly asks to go to a different URL than the one currently loaded, or to reload/return to the starting page. Do NOT use this to guess or assume a URL for the application under test - the page is already loaded at the correct URL.",
     input_schema: {
       type: "object",
       properties: {
-        url: { type: "string", description: "The URL to navigate to" },
+        url: { type: "string", description: "The exact URL to navigate to" },
       },
       required: ["url"],
     },
@@ -92,6 +93,19 @@ export const AGENT_TOOLS: ToolDefinition[] = [
       type: "object",
       properties: {},
       required: [],
+    },
+  },
+  {
+    name: "finishTest",
+    description:
+      "Call this exactly once, as the final action, to report the outcome of the test case. You MUST call this instead of just writing a text conclusion - it is the only way to record whether the test passed or failed.",
+    input_schema: {
+      type: "object",
+      properties: {
+        passed: { type: "boolean", description: "true if the test case's expected outcome was verified, false otherwise" },
+        reasoning: { type: "string", description: "Explanation of what was checked and why the test passed or failed" },
+      },
+      required: ["passed", "reasoning"],
     },
   },
 ];

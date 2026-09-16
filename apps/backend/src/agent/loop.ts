@@ -30,18 +30,20 @@ export class AgentLoop {
     const startTime = Date.now();
     const testId = `test_${Date.now()}`;
 
-    this.log("info", `Starting test: ${testCase}`);
+    const currentUrl = this.page.url();
+    this.log("info", `Starting test: ${testCase}`, { currentUrl });
 
     // Initial user message
     this.messages = [
       {
         role: "user",
-        content: `You are an AI assistant testing a web application. Execute the following test case:\n\n${testCase}\n\nUse the available tools to navigate, interact, and verify the application. At the end, provide your conclusion about whether the test passed or failed.`,
+        content: `You are an AI assistant testing a web application. The browser is already open and currently loaded at this exact URL:\n\n${currentUrl}\n\nDo NOT navigate to a different domain or URL unless the test case explicitly instructs you to, or it is a natural consequence of interacting with the page (e.g. clicking a link, submitting a form). Never guess or assume a different URL for "the application" - the page already loaded at ${currentUrl} IS the application under test.\n\nExecute the following test case:\n\n${testCase}\n\nUse the available tools to interact with and verify the application. When you are done, you MUST call the finishTest tool exactly once with your pass/fail verdict and reasoning - do not just write a text conclusion.`,
       },
     ];
 
     let loopCount = 0;
     const maxLoops = 10;
+    let finalResult: { passed: boolean; reasoning: string } | null = null;
 
     while (loopCount < maxLoops) {
       loopCount++;
@@ -70,9 +72,18 @@ export class AgentLoop {
         content: assistantContent as any,
       });
 
-      // If no tool use, we're done
+      // If no tool use, we're done (agent stopped without calling finishTest)
       if (!response.toolUse || response.stopReason === "end_turn") {
-        this.log("info", `Test completed`, { reason: response.stopReason });
+        this.log("warn", `Agent stopped without calling finishTest`, { reason: response.stopReason });
+        finalResult = { passed: false, reasoning: response.content || "Agent did not call finishTest before stopping." };
+        break;
+      }
+
+      // finishTest is a terminal tool - handle it directly, don't run it through ToolExecutor
+      if (response.toolUse.name === "finishTest") {
+        const { passed, reasoning } = response.toolUse.input as { passed: boolean; reasoning: string };
+        finalResult = { passed: !!passed, reasoning: reasoning || "No reasoning provided." };
+        this.log("info", `finishTest called`, finalResult);
         break;
       }
 
@@ -112,21 +123,16 @@ export class AgentLoop {
 
     const duration = Date.now() - startTime;
 
-    // Extract conclusion from the final message
-    const lastMessage = this.messages[this.messages.length - 1];
-    const conclusion =
-      typeof lastMessage.content === "string"
-        ? lastMessage.content
-        : lastMessage.content?.find((c) => (c as any).type === "text")?.text || "No conclusion";
+    if (!finalResult) {
+      finalResult = { passed: false, reasoning: `Test did not conclude within ${maxLoops} loop iterations.` };
+    }
 
-    const passed = conclusion.toLowerCase().includes("pass") || conclusion.toLowerCase().includes("success");
-
-    this.log("info", `Test result: ${passed ? "PASSED" : "FAILED"}`, { duration, conclusion });
+    this.log("info", `Test result: ${finalResult.passed ? "PASSED" : "FAILED"}`, { duration, reasoning: finalResult.reasoning });
 
     return {
       testId,
-      passed,
-      reasoning: conclusion,
+      passed: finalResult.passed,
+      reasoning: finalResult.reasoning,
       logs: this.logs,
       duration,
     };
