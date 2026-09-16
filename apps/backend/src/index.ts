@@ -92,6 +92,18 @@ app.post<{ Params: { sessionId: string }; Body: { testCase: string } }>("/api/se
   }
 });
 
+app.post<{ Params: { sessionId: string } }>("/api/session/:sessionId/test/stop", async (request, reply) => {
+  const { sessionId } = request.params;
+
+  try {
+    browserManager.stopTest(sessionId);
+    return { status: "stopping" };
+  } catch (error) {
+    app.log.error(error);
+    return reply.status(400).send({ error: String(error) });
+  }
+});
+
 app.get("/ws/session/:sessionId", { websocket: true }, async (socket, request) => {
   const { sessionId } = request.params as { sessionId: string };
 

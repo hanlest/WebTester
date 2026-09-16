@@ -197,11 +197,23 @@ export class BrowserManager {
     session.agentLoop = agentLoop;
 
     const result = await agentLoop.executeTest(testCase);
+    session.agentLoop = undefined;
 
     return {
       passed: result.passed,
       reasoning: result.reasoning,
       logs: result.logs,
     };
+  }
+
+  stopTest(sessionId: string): void {
+    const session = this.sessions.get(sessionId);
+    if (!session) {
+      throw new Error(`Session ${sessionId} not found`);
+    }
+    if (!session.agentLoop) {
+      throw new Error(`No test is currently running for session ${sessionId}`);
+    }
+    session.agentLoop.stop();
   }
 }

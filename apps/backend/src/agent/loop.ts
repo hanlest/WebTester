@@ -7,12 +7,17 @@ import { TestResult, AgentLog } from "./types.js";
 export class AgentLoop {
   private messages: AIMessage[] = [];
   private logs: AgentLog[] = [];
+  private stopRequested = false;
 
   constructor(
     private aiProvider: AIProvider,
     private page: Page,
     private onLog?: (log: AgentLog) => void
   ) {}
+
+  stop() {
+    this.stopRequested = true;
+  }
 
   private log(level: AgentLog["level"], message: string, data?: unknown) {
     const entry: AgentLog = {
@@ -46,12 +51,24 @@ export class AgentLoop {
     let finalResult: { passed: boolean; reasoning: string } | null = null;
 
     while (loopCount < maxLoops) {
+      if (this.stopRequested) {
+        this.log("warn", `Test stopped by user`);
+        finalResult = { passed: false, reasoning: "Test detenido manualmente por el usuario." };
+        break;
+      }
+
       loopCount++;
       this.log("info", `Loop iteration ${loopCount}/${maxLoops}`);
 
       // Get response from AI
       const response = await this.aiProvider.chat(this.messages, AGENT_TOOLS);
       this.log("info", `AI response received`, { stopReason: response.stopReason, hasToolUse: !!response.toolUse });
+
+      if (this.stopRequested) {
+        this.log("warn", `Test stopped by user`);
+        finalResult = { passed: false, reasoning: "Test detenido manualmente por el usuario." };
+        break;
+      }
 
       // Add assistant response to messages
       const assistantContent: Array<{ type: "text" | "tool_use"; text?: string; id?: string; name?: string; input?: Record<string, unknown> }> = [];
@@ -97,6 +114,12 @@ export class AgentLoop {
       for (const log of executor.getLogs()) {
         this.onLog?.(log);
         this.logs.push(log);
+      }
+
+      if (this.stopRequested) {
+        this.log("warn", `Test stopped by user`);
+        finalResult = { passed: false, reasoning: "Test detenido manualmente por el usuario." };
+        break;
       }
 
       // Add tool result to messages

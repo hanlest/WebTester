@@ -37,8 +37,13 @@
   cursor: not-allowed;
 }
 
-.test-editor button {
-  width: 100%;
+.test-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.test-actions button {
+  flex: 1;
   padding: 10px;
   background: #0066cc;
   color: white;
@@ -49,8 +54,23 @@
   transition: background 0.2s;
 }
 
-.test-editor button:hover:not(:disabled) {
+.test-actions button:hover:not(:disabled) {
   background: #0052a3;
+}
+
+.test-actions button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.stop-test-btn {
+  flex: 0 0 auto !important;
+  min-width: 90px;
+  background: #d9534f !important;
+}
+
+.stop-test-btn:hover {
+  background: #ac2925 !important;
 }
 
 .test-editor button:disabled {

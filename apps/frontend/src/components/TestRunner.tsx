@@ -33,8 +33,8 @@ export function TestRunner({ sessionId }: TestRunnerProps) {
 
       if (!response.ok) {
         const error = await response.json();
-        setLogs([
-          ...logs,
+        setLogs((prev) => [
+          ...prev,
           {
             timestamp: Date.now(),
             level: "error",
@@ -55,8 +55,8 @@ export function TestRunner({ sessionId }: TestRunnerProps) {
         setLogs(data.logs);
       }
     } catch (error) {
-      setLogs([
-        ...logs,
+      setLogs((prev) => [
+        ...prev,
         {
           timestamp: Date.now(),
           level: "error",
@@ -65,6 +65,21 @@ export function TestRunner({ sessionId }: TestRunnerProps) {
       ]);
     } finally {
       setIsRunning(false);
+    }
+  };
+
+  const handleStopTest = async () => {
+    try {
+      await fetch(`${BACKEND_URL}/api/session/${sessionId}/test/stop`, { method: "POST" });
+    } catch (error) {
+      setLogs((prev) => [
+        ...prev,
+        {
+          timestamp: Date.now(),
+          level: "error",
+          message: `Error al detener: ${String(error)}`,
+        },
+      ]);
     }
   };
 
@@ -78,9 +93,16 @@ export function TestRunner({ sessionId }: TestRunnerProps) {
           disabled={isRunning}
           placeholder="Describe your test case in natural language..."
         />
-        <button onClick={handleRunTest} disabled={isRunning || !testCase}>
-          {isRunning ? "Running..." : "Run Test"}
-        </button>
+        <div className="test-actions">
+          <button onClick={handleRunTest} disabled={isRunning || !testCase}>
+            {isRunning ? "Running..." : "Run Test"}
+          </button>
+          {isRunning && (
+            <button onClick={handleStopTest} className="stop-test-btn">
+              Stop
+            </button>
+          )}
+        </div>
       </div>
 
       <div className="test-logs">
