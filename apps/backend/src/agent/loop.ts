@@ -2,6 +2,7 @@ import { Page } from "playwright";
 import { AIProvider, AIMessage } from "../ai/index.js";
 import { AGENT_TOOLS } from "./tools.js";
 import { ToolExecutor } from "./executor.js";
+import type { ToolExecutorDeps } from "./tool-context.js";
 import { TestResult, AgentLog } from "./types.js";
 
 export class AgentLoop {
@@ -12,7 +13,8 @@ export class AgentLoop {
   constructor(
     private aiProvider: AIProvider,
     private page: Page,
-    private onLog?: (log: AgentLog) => void
+    private onLog?: (log: AgentLog) => void,
+    private toolDeps?: ToolExecutorDeps
   ) {}
 
   stop() {
@@ -38,16 +40,40 @@ export class AgentLoop {
     const currentUrl = this.page.url();
     this.log("info", `Starting test: ${testCase}`, { currentUrl });
 
+    const agentGuidelines = `You are an AI assistant testing a web application. The browser is already open and currently loaded at this exact URL:
+
+${currentUrl}
+
+Do NOT navigate to a different domain or URL unless the test case explicitly instructs you to, or it is a natural consequence of interacting with the page (e.g. clicking a link, submitting a form). Never guess or assume a different URL for "the application" - the page already loaded at ${currentUrl} IS the application under test.
+
+Execute the following test case:
+
+${testCase}
+
+Use the available tools to interact with and verify the application. Prefer getPageState after important actions (form submit, navigation) to inspect URL, visible dialogs/modals, errors, and whether login fields are still present. After submitting a login form, call wait (2000–4000 ms) before inspecting the page.
+
+AUTHENTICATION / LOGIN:
+- Do NOT fail login only because the URL did not become "/dashboard" or a specific path. SPAs often keep the same URL or use unexpected routes.
+- Login likely succeeded if: login/password fields disappeared or are no longer visible; user menu, logout, or authenticated app chrome appeared; OR a modal/dialog opened that is clearly unrelated to credential errors (onboarding, notices, promotions). A post-login modal does NOT mean login failed.
+- If a modal obscures the page after login, close it (click Cerrar/Close/X or pressKey Escape), then call getPageState again before your verdict.
+- Fail login only with clear evidence: invalid-credentials messages, errors on the login form, or the login form still visible with no sign of an authenticated session.
+
+If you discover a defect, call reportBug before finishTest. For data validation you may use queryDatabase (SELECT only) when the test case requires DB checks.
+
+When you are done, you MUST call the finishTest tool exactly once with your pass/fail verdict and reasoning - do not just write a text conclusion.
+
+IMPORTANT: Write the "reasoning" field of finishTest in Spanish (español). Any other free text you write should also be in Spanish.`;
+
     // Initial user message
     this.messages = [
       {
         role: "user",
-        content: `You are an AI assistant testing a web application. The browser is already open and currently loaded at this exact URL:\n\n${currentUrl}\n\nDo NOT navigate to a different domain or URL unless the test case explicitly instructs you to, or it is a natural consequence of interacting with the page (e.g. clicking a link, submitting a form). Never guess or assume a different URL for "the application" - the page already loaded at ${currentUrl} IS the application under test.\n\nExecute the following test case:\n\n${testCase}\n\nUse the available tools to interact with and verify the application. When you are done, you MUST call the finishTest tool exactly once with your pass/fail verdict and reasoning - do not just write a text conclusion.\n\nIMPORTANT: Write the "reasoning" field of finishTest in Spanish (español). Any other free text you write should also be in Spanish.`,
+        content: agentGuidelines,
       },
     ];
 
     let loopCount = 0;
-    const maxLoops = 10;
+    const maxLoops = 15;
     let finalResult: { passed: boolean; reasoning: string } | null = null;
 
     while (loopCount < maxLoops) {
@@ -107,7 +133,7 @@ export class AgentLoop {
       // Execute the tool
       this.log("info", `Executing tool: ${response.toolUse.name}`, response.toolUse.input);
 
-      const executor = new ToolExecutor(this.page);
+      const executor = new ToolExecutor(this.page, this.toolDeps);
       const toolResult = await executor.execute(response.toolUse.name, response.toolUse.input);
 
       // Add logs from executor

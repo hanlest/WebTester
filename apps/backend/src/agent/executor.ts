@@ -1,11 +1,15 @@
 import { Page } from "playwright";
 import { ToolResult, AgentLog } from "./types.js";
+import type { ToolExecutorDeps } from "./tool-context.js";
+import { queryDatabase, reportBug } from "./tool-context.js";
 
 export class ToolExecutor {
   private logs: AgentLog[] = [];
-  private startTime = Date.now();
 
-  constructor(private page: Page) {}
+  constructor(
+    private page: Page,
+    private deps?: ToolExecutorDeps
+  ) {}
 
   getLogs(): AgentLog[] {
     return this.logs;
@@ -35,6 +39,12 @@ export class ToolExecutor {
           return await this.fill(input.selector as string, input.text as string);
         case "screenshot":
           return await this.screenshot();
+        case "getPageState":
+          return await this.getPageState();
+        case "wait":
+          return await this.wait(input.ms as number);
+        case "pressKey":
+          return await this.pressKey(input.key as string);
         case "getAccessibilityTree":
           return await this.getAccessibilityTree();
         case "evaluateJS":
@@ -45,6 +55,12 @@ export class ToolExecutor {
           return await this.goBack();
         case "goForward":
           return await this.goForward();
+        case "reportBug":
+          if (!this.deps) return { success: false, error: "reportBug not available" };
+          return await reportBug(this.deps, input);
+        case "queryDatabase":
+          if (!this.deps) return { success: false, error: "queryDatabase not available" };
+          return await queryDatabase(this.deps, input);
         default:
           return { success: false, error: `Unknown tool: ${toolName}` };
       }
@@ -70,8 +86,9 @@ export class ToolExecutor {
     this.log("info", `Clicking element: ${selector}`);
     try {
       await this.page.click(selector);
+      await this.page.waitForTimeout(400);
       this.log("info", `Click successful`);
-      return { success: true };
+      return { success: true, data: { url: this.page.url() } };
     } catch (error) {
       throw new Error(`Click failed on ${selector}: ${error}`);
     }
@@ -91,12 +108,83 @@ export class ToolExecutor {
   private async screenshot(): Promise<ToolResult> {
     this.log("info", `Taking screenshot`);
     try {
-      const buffer = await this.page.screenshot({ type: "png" });
-      const base64 = buffer.toString("base64");
+      await this.page.screenshot({ type: "png" });
       this.log("info", `Screenshot taken`);
-      return { success: true, data: { imageBase64: base64 } };
+      return {
+        success: true,
+        data: {
+          url: this.page.url(),
+          title: await this.page.title(),
+          note: "Screenshot saved for the session. Use getPageState or getAccessibilityTree to inspect the UI.",
+        },
+      };
     } catch (error) {
       throw new Error(`Screenshot failed: ${error}`);
+    }
+  }
+
+  private async getPageState(): Promise<ToolResult> {
+    this.log("info", `Getting page state`);
+    try {
+      const code = `
+        (function () {
+          function isVisible(el) {
+            if (!el || el.nodeType !== 1) return false;
+            var style = window.getComputedStyle(el);
+            if (style.display === "none" || style.visibility === "hidden" || style.opacity === "0") return false;
+            var rect = el.getBoundingClientRect();
+            return rect.width > 0 && rect.height > 0;
+          }
+          function shortText(el, max) {
+            return (el.textContent || "").replace(/\\s+/g, " ").trim().slice(0, max);
+          }
+          var loginSelectors = 'input[type="password"], input[type="email"], input[autocomplete="username"], input[autocomplete="current-password"]';
+          var loginFields = Array.prototype.slice.call(document.querySelectorAll(loginSelectors)).filter(isVisible);
+          var dialogNodes = Array.prototype.slice.call(
+            document.querySelectorAll('[role="dialog"], [aria-modal="true"], dialog[open]')
+          ).filter(isVisible);
+          var dialogs = dialogNodes.map(function (el) {
+            return { role: el.getAttribute("role"), ariaLabel: el.getAttribute("aria-label"), text: shortText(el, 400) };
+          });
+          var errorNodes = Array.prototype.slice.call(
+            document.querySelectorAll('[role="alert"], [aria-live="assertive"], .error, [class*="error" i]')
+          ).filter(isVisible);
+          var errors = errorNodes.map(function (el) { return shortText(el, 200); }).filter(Boolean);
+          return {
+            url: location.href,
+            pathname: location.pathname,
+            title: document.title,
+            visibleLoginFieldCount: loginFields.length,
+            visibleDialogCount: dialogs.length,
+            dialogs: dialogs,
+            alertsAndErrors: errors.slice(0, 10),
+            bodyTextSnippet: shortText(document.body, 1500),
+          };
+        })()
+      `;
+      const state = await this.page.evaluate(code);
+      this.log("info", `Page state retrieved`);
+      return { success: true, data: state };
+    } catch (error) {
+      throw new Error(`getPageState failed: ${error}`);
+    }
+  }
+
+  private async wait(ms: number): Promise<ToolResult> {
+    const duration = Math.min(Math.max(ms || 0, 0), 15000);
+    this.log("info", `Waiting ${duration}ms`);
+    await this.page.waitForTimeout(duration);
+    return { success: true, data: { waitedMs: duration, url: this.page.url() } };
+  }
+
+  private async pressKey(key: string): Promise<ToolResult> {
+    this.log("info", `Pressing key: ${key}`);
+    try {
+      await this.page.keyboard.press(key);
+      await this.page.waitForTimeout(300);
+      return { success: true, data: { key, url: this.page.url() } };
+    } catch (error) {
+      throw new Error(`pressKey failed: ${error}`);
     }
   }
 

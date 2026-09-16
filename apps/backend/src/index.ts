@@ -12,6 +12,8 @@ import cors from "@fastify/cors";
 import websocket from "@fastify/websocket";
 import { BrowserManager } from "./browser.js";
 import { createAIProvider } from "./ai/index.js";
+import { registerRoutes } from "./routes.js";
+import { appStore, postgresReadOnly } from "./services.js";
 
 const app = Fastify({ logger: true });
 const browserManager = new BrowserManager();
@@ -30,6 +32,13 @@ await app.register(cors, {
 });
 await app.register(websocket);
 
+const savedDbUrl = appStore.getSetting("database_url");
+if (savedDbUrl) {
+  postgresReadOnly.configure(savedDbUrl);
+}
+
+registerRoutes(app, browserManager);
+
 app.get("/health", async () => {
   return { status: "ok" };
 });
@@ -43,15 +52,20 @@ app.get("/config", async () => {
   };
 });
 
-app.post<{ Body: { url: string; deviceProfile: "desktop" | "iphone" | "pixel" } }>("/api/session/start", async (request, reply) => {
-  const { url, deviceProfile } = request.body;
+app.post<{
+  Body: { url: string; deviceProfile: "desktop" | "iphone" | "pixel"; targetAppId?: string; projectId?: string };
+}>("/api/session/start", async (request, reply) => {
+  const { url, deviceProfile, targetAppId, projectId } = request.body;
 
   if (!url) {
     return reply.status(400).send({ error: "URL is required" });
   }
 
   try {
-    const { sessionId, navigationError } = await browserManager.createSession(url, deviceProfile || "desktop");
+    const { sessionId, navigationError } = await browserManager.createSession(url, deviceProfile || "desktop", {
+      targetAppId,
+      projectId,
+    });
     return { sessionId, status: "created", navigationError };
   } catch (error) {
     app.log.error(error);

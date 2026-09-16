@@ -1,27 +1,33 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import type { AgentLog } from "@web-tester/shared";
 import { BACKEND_URL } from "../config";
 import "./TestRunner.css";
 
+const DEFAULT_TEST_CASE = `Revisa el login de esta aplicación.
+Usuario: estarsiempre.qa@gmail.com
+Clave: QA123456789
+
+El login es exitoso si accedes a la app aunque aparezca un modal informativo (ciérralo si hace falta).`;
+
 interface TestRunnerProps {
   sessionId: string;
+  agentLogs: AgentLog[];
+  onClearAgentLogs: () => void;
 }
 
-interface AgentLog {
-  timestamp: number;
-  level: "info" | "warn" | "error" | "debug";
-  message: string;
-  data?: Record<string, unknown> | string | number | boolean | null;
-}
-
-export function TestRunner({ sessionId }: TestRunnerProps) {
-  const [testCase, setTestCase] = useState("Navigate to https://example.com and verify the page loads");
+export function TestRunner({ sessionId, agentLogs, onClearAgentLogs }: TestRunnerProps) {
+  const [testCase, setTestCase] = useState(DEFAULT_TEST_CASE);
   const [isRunning, setIsRunning] = useState(false);
   const [result, setResult] = useState<{ passed: boolean; reasoning: string } | null>(null);
-  const [logs, setLogs] = useState<AgentLog[]>([]);
+  const logsEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    logsEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [agentLogs]);
 
   const handleRunTest = async () => {
     setIsRunning(true);
-    setLogs([]);
+    onClearAgentLogs();
     setResult(null);
 
     try {
@@ -33,15 +39,7 @@ export function TestRunner({ sessionId }: TestRunnerProps) {
 
       if (!response.ok) {
         const error = await response.json();
-        setLogs((prev) => [
-          ...prev,
-          {
-            timestamp: Date.now(),
-            level: "error",
-            message: `API Error: ${error.error}`,
-          },
-        ]);
-        setIsRunning(false);
+        setResult({ passed: false, reasoning: `Error de API: ${error.error}` });
         return;
       }
 
@@ -50,19 +48,8 @@ export function TestRunner({ sessionId }: TestRunnerProps) {
         passed: data.passed,
         reasoning: data.reasoning,
       });
-
-      if (data.logs) {
-        setLogs(data.logs);
-      }
     } catch (error) {
-      setLogs((prev) => [
-        ...prev,
-        {
-          timestamp: Date.now(),
-          level: "error",
-          message: `Error: ${String(error)}`,
-        },
-      ]);
+      setResult({ passed: false, reasoning: `Error: ${String(error)}` });
     } finally {
       setIsRunning(false);
     }
@@ -72,14 +59,7 @@ export function TestRunner({ sessionId }: TestRunnerProps) {
     try {
       await fetch(`${BACKEND_URL}/api/session/${sessionId}/test/stop`, { method: "POST" });
     } catch (error) {
-      setLogs((prev) => [
-        ...prev,
-        {
-          timestamp: Date.now(),
-          level: "error",
-          message: `Error al detener: ${String(error)}`,
-        },
-      ]);
+      console.error("Error al detener test:", error);
     }
   };
 
@@ -106,16 +86,20 @@ export function TestRunner({ sessionId }: TestRunnerProps) {
       </div>
 
       <div className="test-logs">
-        <h3>Agent Activity</h3>
+        <h3>Agent Activity {isRunning && <span className="live-badge">en vivo</span>}</h3>
         <div className="logs-content">
-          {logs.map((log, idx) => (
+          {agentLogs.length === 0 && !isRunning && (
+            <p className="logs-empty">Ejecuta un test para ver la actividad del agente.</p>
+          )}
+          {agentLogs.map((log, idx) => (
             <div key={idx} className={`log-entry log-${log.level}`}>
               <span className="log-time">{new Date(log.timestamp).toLocaleTimeString()}</span>
               <span className="log-level">[{log.level.toUpperCase()}]</span>
               <span className="log-message">{log.message}</span>
-              {log.data && <span className="log-data">{String(JSON.stringify(log.data))}</span>}
+              {log.data !== undefined && <span className="log-data">{String(JSON.stringify(log.data))}</span>}
             </div>
           ))}
+          <div ref={logsEndRef} />
         </div>
       </div>
 

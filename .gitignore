@@ -8,6 +8,9 @@ build/
 .env.*.local
 .secrets/
 reports/
+data/
+debug_iphone.mjs
+iphone_check.png
 .vscode/settings.json
 .idea/
 

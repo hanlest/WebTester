@@ -14,11 +14,27 @@
   gap: 8px;
 }
 
-.test-editor h3 {
+.test-editor h3,
+.test-logs h3 {
   font-size: 14px;
   font-weight: 600;
   color: #333;
   margin: 0;
+}
+
+.live-badge {
+  font-size: 11px;
+  font-weight: 600;
+  color: #16a34a;
+  margin-left: 8px;
+  text-transform: uppercase;
+}
+
+.logs-empty {
+  color: #888;
+  font-size: 13px;
+  margin: 0;
+  padding: 8px 0;
 }
 
 .test-editor textarea {

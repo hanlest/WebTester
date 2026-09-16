@@ -12,8 +12,15 @@ export interface BrowserSession {
   createdAt: number;
 }
 
+export interface AgentLog {
+  timestamp: number;
+  level: "info" | "warn" | "error" | "debug";
+  message: string;
+  data?: unknown;
+}
+
 export interface WSMessage {
-  type: "screencast" | "log" | "error" | "session_created" | "session_closed";
+  type: "screencast" | "screencast_stopped" | "log" | "agent_log" | "error" | "session_created" | "session_closed";
   payload: unknown;
 }
 
@@ -31,7 +38,25 @@ export interface LogMessage extends WSMessage {
   };
 }
 
+export interface AgentLogMessage extends WSMessage {
+  type: "agent_log";
+  payload: AgentLog;
+}
+
 export type DeviceProfile = "desktop" | "iphone" | "pixel";
+
+export type BugSeverity = "low" | "medium" | "high" | "critical";
+
+export type VisualThemeId = "default" | "win311" | "win95" | "win98" | "winxp" | "mac-classic-ii";
+
+export const VISUAL_THEMES: { id: VisualThemeId; name: string }[] = [
+  { id: "default", name: "Modern (default)" },
+  { id: "win311", name: "Windows 3.11" },
+  { id: "win95", name: "Windows 95" },
+  { id: "win98", name: "Windows 98" },
+  { id: "winxp", name: "Windows XP" },
+  { id: "mac-classic-ii", name: "Macintosh Classic II" },
+];
 
 export const DEVICE_PROFILES: Record<DeviceProfile, { name: string; viewport: { width: number; height: number }; userAgent?: string }> = {
   desktop: {

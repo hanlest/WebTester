@@ -1,142 +1,68 @@
 # Web Tester - Implementation Phases
 
-## ✅ Phase 0: Scaffolding (COMPLETE)
+## ✅ Phase 0–2
 
-- ✅ Monorepo structure with npm workspaces
-- ✅ TypeScript configuration (strict mode)
-- ✅ Backend: Fastify + Playwright + WebSocket
-- ✅ Frontend: React + Vite
-- ✅ Shared types and constants
-- ✅ Git initialization and .gitignore
-- ✅ Build configuration for all workspaces
-
-## ✅ Phase 1: Live Browser Streaming (COMPLETE)
-
-- ✅ Backend: CDP screencast integration for live video stream
-- ✅ Backend: Device profile support (desktop, iPhone, Pixel)
-- ✅ Backend: Session management endpoints (start, stop)
-- ✅ Backend: WebSocket streaming of frames + logs
-- ✅ Frontend: Canvas-based live view of browser
-- ✅ Frontend: Device profile selector
-- ✅ Frontend: Activity log panel
-- ✅ Frontend: URL input and session control UI
-
-**Status**: Tested and working. Users can:
-- Start a session against any public URL
-- Select device profile (Desktop/iPhone 13/Pixel 5)
-- View live browser stream in real-time
-- See activity logs as the browser loads pages
+See git history. Live streaming + AI-guided tests are implemented.
 
 ---
 
-## 📋 Phase 2: AI Agent (Guided & Autonomous Testing)
+## ✅ Phase 3: Bug Detection & Reporting (COMPLETE)
 
-### Subtasks:
-- [ ] Implement AIProvider interface (abstract class)
-  - [ ] AnthropicProvider (Claude API)
-  - [ ] OpenAIProvider
-  - [ ] Provider selection via environment variable
-- [ ] Implement browser automation tools:
-  - [ ] `navigate(url)` - Navigate to page
-  - [ ] `click(selector)` - Click element
-  - [ ] `fill(selector, text)` - Fill input
-  - [ ] `screenshot()` - Capture current screen
-  - [ ] `getAccessibilityTree()` - Get page structure
-  - [ ] `evaluateJS(code)` - Execute JavaScript
-- [ ] Guided test execution:
-  - [ ] Parse test case in natural language
-  - [ ] Execute steps sequentially
-  - [ ] Compare actual vs. expected results
-  - [ ] Determine pass/fail
-- [ ] Autonomous exploration:
-  - [ ] Discover interactive elements
-  - [ ] Navigate app without explicit guidance
-  - [ ] Detect anomalies and potential bugs
-- [ ] Frontend: Test case editor + execution controls
-- [ ] Frontend: Real-time agent activity log
+- ✅ `reportBug` agent tool (screenshot, console, network errors, DOM, severity)
+- ✅ Reports under `reports/{bugId}/` (Markdown + JSON + PNG)
+- ✅ SQLite bug index + REST API (`/api/bugs`, screenshot, mark reviewed)
+- ✅ Frontend bug viewer (Bugs tab)
 
 ---
 
-## 📋 Phase 3: Bug Detection & Reporting
+## ✅ Phase 4: App Authentication (COMPLETE)
 
-### Subtasks:
-- [ ] reportBug tool implementation:
-  - [ ] Capture screenshot
-  - [ ] Collect console logs
-  - [ ] Extract network errors
-  - [ ] Get DOM snapshot
-  - [ ] Generate unique bug ID
-- [ ] Report storage:
-  - [ ] Markdown format with full context
-  - [ ] JSON sidecar for machine parsing
-  - [ ] Screenshot attachment
-- [ ] Frontend: Bug report viewer
-  - [ ] List all detected bugs per run
-  - [ ] Bug detail panel (steps, images, DOM)
-  - [ ] Mark bugs as reviewed/fixed
-- [ ] Severity estimation (AI-based)
+- ✅ Target apps per project with login selectors
+- ✅ Credentials encrypted (AES-256-GCM) in `.secrets/`
+- ✅ Playwright `storageState` load on session start when target app is selected
+- ✅ Auto-save `storageState` after successful test run
+- ✅ Manual save: `POST /api/session/:sessionId/save-storage/:targetAppId`
+- ✅ Frontend credentials form (Projects tab)
 
 ---
 
-## 📋 Phase 4: App Authentication
+## ✅ Phase 5: Database Integration (MVP) (COMPLETE)
 
-### Subtasks:
-- [ ] Target app configuration:
-  - [ ] URL, device profiles, login selector
-  - [ ] Credential storage (AES-256-GCM encrypted)
-- [ ] Playwright session management:
-  - [ ] storageState saving/loading
-  - [ ] Automatic re-login on session expiry
-- [ ] Multi-step login support (if needed)
-- [ ] Frontend: Credentials form + encryption
+- ✅ Postgres connector (read-only SELECT validation)
+- ✅ `queryDatabase` agent tool
+- ✅ `DATABASE_URL` env + persisted setting via API
+- ✅ Frontend DB connection in Settings
 
 ---
 
-## 📋 Phase 5: Database Integration (MVP)
+## ✅ Phase 6: Persistence & Polish (COMPLETE)
 
-### Subtasks:
-- [ ] Postgres connector (read-only):
-  - [ ] Connection string handling
-  - [ ] Query execution
-  - [ ] Result caching
-- [ ] MySQL connector (phase 5b)
-- [ ] queryDatabase tool:
-  - [ ] Allow agent to run SELECT queries
-  - [ ] Enforce read-only (reject INSERT/UPDATE/DELETE)
-  - [ ] Include DB state changes in bug reports
-- [ ] Database state snapshots:
-  - [ ] Before/after test action
-  - [ ] Diff detection for anomalies
-- [ ] Frontend: DB connection config form
+- ✅ SQLite (`data/web-tester.sqlite`): projects, target apps, test cases, runs, bug index, settings
+- ✅ REST APIs for projects, apps, test cases, runs
+- ✅ Run history UI
+- ✅ Export/import JSON (`/api/export`, `/api/import`)
 
 ---
 
-## 📋 Phase 6: Persistence & Polish
+## ✅ Phase 7: Visual Themes (COMPLETE)
 
-### Subtasks:
-- [ ] SQLite database:
-  - [ ] Projects schema
-  - [ ] Target apps schema
-  - [ ] Test cases schema
-  - [ ] Runs & execution history
-  - [ ] Bug index
-- [ ] Frontend pages:
-  - [ ] Projects management
-  - [ ] Run history + results
-  - [ ] Settings (AI provider, DB credentials, etc.)
-- [ ] Local file export/import
-- [ ] Performance optimization
+- ✅ Theme engine (`data-visual-theme`, CSS variables, `visual-themes.css`)
+- ✅ Selector in sidebar with `localStorage` persistence
+- ✅ Themes: **default**, **Windows 3.11**, **95**, **98**, **XP**, **Macintosh Classic II**
+
+---
+
+## Optional / future
+
+- [ ] Phase 2b: Autonomous exploration mode
+- [ ] MySQL connector (5b)
+- [ ] Full pixel-perfect OS chrome recreation
+- [ ] Performance tuning at scale
 
 ---
 
 ## Current Status
 
-**Ready to run**: Backend and frontend are fully functional for Phase 1.
+**Phases 0–7 implemented.** Restart backend + frontend after pull.
 
-To start developing Phase 2 (AI Agent), see `README.md` for startup instructions.
-
-### Next Steps:
-1. Implement AIProvider abstraction + Anthropic/OpenAI implementations
-2. Add browser automation tools (navigate, click, fill, etc.)
-3. Build guided test execution loop
-4. Integrate autonomous exploration mode
+Recommended: configure `OPENAI_API_KEY` or `ANTHROPIC_API_KEY`, create a target app under **Proyectos**, save QA credentials, start session with target app selected, run AI test.
