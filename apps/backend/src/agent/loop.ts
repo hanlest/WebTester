@@ -67,7 +67,7 @@ export class AgentLoop {
 
       this.messages.push({
         role: "assistant",
-        content: assistantContent.length > 0 ? assistantContent : response.content,
+        content: assistantContent as any,
       });
 
       // If no tool use, we're done

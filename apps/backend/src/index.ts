@@ -24,7 +24,10 @@ try {
   console.error("❌ Failed to initialize AI Provider:", error);
 }
 
-await app.register(cors);
+await app.register(cors, {
+  origin: true,
+  credentials: true,
+});
 await app.register(websocket);
 
 app.get("/health", async () => {

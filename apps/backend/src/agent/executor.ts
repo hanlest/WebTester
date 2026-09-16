@@ -103,26 +103,33 @@ export class ToolExecutor {
   private async getAccessibilityTree(): Promise<ToolResult> {
     this.log("info", `Getting accessibility tree`);
     try {
-      const tree = await this.page.evaluate(() => {
-        const getRole = (el: Element): string => el.getAttribute("role") || el.tagName.toLowerCase();
-        const getText = (el: Element): string => (el.textContent || "").slice(0, 100).trim();
-
-        const traverse = (el: Element, depth = 0): string => {
-          if (depth > 10) return "";
-          const indent = "  ".repeat(depth);
-          const role = getRole(el);
-          const text = getText(el);
-          const info = text ? `${role} "${text}"` : role;
-
-          let result = `${indent}${info}\n`;
-          for (const child of el.children) {
-            result += traverse(child, depth + 1);
+      // Passed as a raw string (not a compiled function) to avoid esbuild/tsx
+      // injecting a __name() helper call that doesn't exist in the browser context.
+      const code = `
+        (function () {
+          function getRole(el) {
+            return el.getAttribute("role") || el.tagName.toLowerCase();
           }
-          return result;
-        };
+          function getText(el) {
+            return (el.textContent || "").slice(0, 100).trim();
+          }
+          function traverse(el, depth) {
+            if (depth > 10) return "";
+            var indent = "  ".repeat(depth);
+            var role = getRole(el);
+            var text = getText(el);
+            var info = text ? role + ' "' + text + '"' : role;
+            var result = indent + info + "\\n";
+            for (var i = 0; i < el.children.length; i++) {
+              result += traverse(el.children[i], depth + 1);
+            }
+            return result;
+          }
+          return traverse(document.body, 0);
+        })()
+      `;
 
-        return traverse(document.body);
-      });
+      const tree = await this.page.evaluate(code);
 
       this.log("info", `Accessibility tree retrieved`);
       return { success: true, data: { tree } };
