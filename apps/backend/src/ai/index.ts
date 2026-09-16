@@ -1,5 +1,6 @@
 import { AIProvider } from "./provider.js";
 import { AnthropicProvider } from "./anthropic.js";
+import { OpenAIProvider } from "./openai.js";
 
 export { AIProvider, type ToolDefinition, type AIMessage, type AIResponse } from "./provider.js";
 
@@ -11,7 +12,7 @@ export function createAIProvider(): AIProvider {
   }
 
   if (provider === "openai") {
-    throw new Error("OpenAI provider not yet implemented");
+    return new OpenAIProvider();
   }
 
   throw new Error(`Unknown AI provider: ${provider}`);

@@ -3,7 +3,7 @@ import { AIProvider, ToolDefinition, AIMessage, AIResponse } from "./provider.js
 
 export class AnthropicProvider extends AIProvider {
   private client: Anthropic;
-  private model = "claude-3-5-sonnet-20241022";
+  private model = process.env.ANTHROPIC_MODEL || "claude-3-5-sonnet-20241022";
 
   constructor() {
     super();

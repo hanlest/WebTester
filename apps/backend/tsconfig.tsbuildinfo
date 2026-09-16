@@ -1,1 +1,1 @@
-{"root":["./src/browser.ts","./src/index.ts","./src/agent/executor.ts","./src/agent/loop.ts","./src/agent/tools.ts","./src/agent/types.ts","./src/ai/anthropic.ts","./src/ai/index.ts","./src/ai/provider.ts"],"version":"5.9.3"}
+{"root":["./src/browser.ts","./src/index.ts","./src/agent/executor.ts","./src/agent/loop.ts","./src/agent/tools.ts","./src/agent/types.ts","./src/ai/anthropic.ts","./src/ai/index.ts","./src/ai/openai.ts","./src/ai/provider.ts"],"version":"5.9.3"}

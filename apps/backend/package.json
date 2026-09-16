@@ -16,6 +16,7 @@
     "@web-tester/shared": "*",
     "dotenv": "^16.4.5",
     "fastify": "^4.26.1",
+    "openai": "^4.52.7",
     "playwright": "^1.43.0"
   },
   "devDependencies": {
