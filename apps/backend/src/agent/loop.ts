@@ -37,7 +37,7 @@ export class AgentLoop {
     this.messages = [
       {
         role: "user",
-        content: `You are an AI assistant testing a web application. The browser is already open and currently loaded at this exact URL:\n\n${currentUrl}\n\nDo NOT navigate to a different domain or URL unless the test case explicitly instructs you to, or it is a natural consequence of interacting with the page (e.g. clicking a link, submitting a form). Never guess or assume a different URL for "the application" - the page already loaded at ${currentUrl} IS the application under test.\n\nExecute the following test case:\n\n${testCase}\n\nUse the available tools to interact with and verify the application. When you are done, you MUST call the finishTest tool exactly once with your pass/fail verdict and reasoning - do not just write a text conclusion.`,
+        content: `You are an AI assistant testing a web application. The browser is already open and currently loaded at this exact URL:\n\n${currentUrl}\n\nDo NOT navigate to a different domain or URL unless the test case explicitly instructs you to, or it is a natural consequence of interacting with the page (e.g. clicking a link, submitting a form). Never guess or assume a different URL for "the application" - the page already loaded at ${currentUrl} IS the application under test.\n\nExecute the following test case:\n\n${testCase}\n\nUse the available tools to interact with and verify the application. When you are done, you MUST call the finishTest tool exactly once with your pass/fail verdict and reasoning - do not just write a text conclusion.\n\nIMPORTANT: Write the "reasoning" field of finishTest in Spanish (español). Any other free text you write should also be in Spanish.`,
       },
     ];
 

@@ -103,7 +103,7 @@ export const AGENT_TOOLS: ToolDefinition[] = [
       type: "object",
       properties: {
         passed: { type: "boolean", description: "true if the test case's expected outcome was verified, false otherwise" },
-        reasoning: { type: "string", description: "Explanation of what was checked and why the test passed or failed" },
+        reasoning: { type: "string", description: "Explanation of what was checked and why the test passed or failed. Must be written in Spanish (español)." },
       },
       required: ["passed", "reasoning"],
     },
