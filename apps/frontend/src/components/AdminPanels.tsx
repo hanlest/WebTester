@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import type { DeviceProfile } from "@web-tester/shared";
 import { apiGet, apiPatch, apiPost, apiPut } from "../api/client";
 import { BACKEND_URL } from "../config";
+import { Win311Combo } from "./Win311Combo";
 import "./AdminPanels.css";
 
 interface Project {
@@ -86,11 +87,11 @@ export function ProjectsPanel() {
     <div className="admin-panel">
       <h2>Proyectos y apps</h2>
       <div className="row">
-        <select value={selected} onChange={(e) => setSelected(e.target.value)}>
+        <Win311Combo value={selected} onChange={(e) => setSelected(e.target.value)}>
           {projects.map((p) => (
             <option key={p.id} value={p.id}>{p.name}</option>
           ))}
-        </select>
+        </Win311Combo>
         <input placeholder="Nuevo proyecto" value={newProject} onChange={(e) => setNewProject(e.target.value)} />
         <button type="button" onClick={addProject}>Crear</button>
       </div>
@@ -173,7 +174,10 @@ export function BugsPanel() {
           <div className="bug-detail">
             <h3>{String(detail.title)}</h3>
             <p>{String(detail.description)}</p>
-            <img src={`${BACKEND_URL}/api/bugs/${detail.id}/screenshot`} alt="screenshot" />
+            <img
+              src={`${BACKEND_URL}/api/bugs/${detail.id}/screenshot`}
+              alt="Captura de pantalla del bug en el momento del reporte, tal como la guardó el agente o el usuario."
+            />
             <pre>{String(detail.markdown || "").slice(0, 2000)}</pre>
             <button type="button" onClick={() => toggleReviewed(String(detail.id), true)}>Marcar revisado</button>
           </div>
@@ -213,21 +217,47 @@ export function SettingsPanel() {
   };
 
   return (
-    <div className="admin-panel">
+    <div className="admin-panel settings-panel">
       <h2>Ajustes</h2>
-      <p className="muted">Base de datos Postgres (Fase 5) — solo lectura para el agente.</p>
-      <input
-        placeholder="postgresql://user:pass@localhost:5432/db"
-        value={dbUrl}
-        onChange={(e) => setDbUrl(e.target.value)}
-        style={{ width: "100%" }}
-      />
-      <button type="button" onClick={saveDb}>Guardar conexión</button>
-      <p>Estado: {dbStatus?.configured ? "configurado" : "no configurado"}</p>
-      <hr />
-      <h3>Export / Import (Fase 6)</h3>
-      <button type="button" onClick={exportData}>Exportar JSON</button>
-      <input type="file" accept="application/json" onChange={(e) => e.target.files?.[0] && importData(e.target.files[0])} />
+
+      <section className="admin-panel-section" aria-labelledby="settings-db-heading">
+        <p id="settings-db-heading" className="section-label">Base de datos Postgres (Fase 5)</p>
+        <p className="muted">Solo lectura para el agente.</p>
+        <div className="form-group">
+          <label htmlFor="settings-db-url">Cadena de conexión</label>
+          <input
+            id="settings-db-url"
+            type="text"
+            placeholder="postgresql://user:pass@localhost:5432/db"
+            value={dbUrl}
+            onChange={(e) => setDbUrl(e.target.value)}
+            autoComplete="off"
+          />
+        </div>
+        <div className="admin-panel-actions">
+          <button type="button" className="mac-btn-default" onClick={saveDb}>Guardar conexión</button>
+        </div>
+        <p className="status-line">
+          Estado: {dbStatus?.configured ? "configurado" : "no configurado"}
+        </p>
+      </section>
+
+      <hr className="admin-panel-divider" />
+
+      <section className="admin-panel-section" aria-labelledby="settings-export-heading">
+        <h3 id="settings-export-heading" className="section-label">Export / Import (Fase 6)</h3>
+        <div className="admin-panel-actions">
+          <button type="button" onClick={exportData}>Exportar JSON</button>
+          <label className="admin-file-input">
+            <span>Importar JSON</span>
+            <input
+              type="file"
+              accept="application/json"
+              onChange={(e) => e.target.files?.[0] && importData(e.target.files[0])}
+            />
+          </label>
+        </div>
+      </section>
     </div>
   );
 }

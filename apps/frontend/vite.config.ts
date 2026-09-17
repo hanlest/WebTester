@@ -11,6 +11,10 @@ export default defineConfig(({ mode }) => {
   return {
     envDir: rootDir,
     envPrefix: ["VITE_", "BACKEND_"],
+    resolve: {
+      // Preferir fuentes TS/TSX; los .js emitidos en src no deben tapar los .tsx
+      extensions: [".tsx", ".ts", ".jsx", ".js", ".mjs", ".mts", ".json"],
+    },
     plugins: [react()],
     server: {
       port,

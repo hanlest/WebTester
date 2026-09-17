@@ -39,3 +39,15 @@ Full roadmap: [PHASES.md](./PHASES.md)
 ## Environment
 
 See [.env.example](./.env.example) for `AI_PROVIDER`, API keys, `DATABASE_URL`, `SECRETS_KEY`, ports.
+
+## Branch protection (GitHub)
+
+`master` uses PRs and required reviews. To re-apply the same rules on a new branch or after recreating the repo:
+
+```powershell
+gh auth login
+.\scripts\setup-branch-protection.ps1
+# optional: -Branch main -Repo owner/repo
+```
+
+Verify: `gh api repos/hanlest/WebTester/branches/master/protection`

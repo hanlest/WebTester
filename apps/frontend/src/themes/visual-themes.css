@@ -12,27 +12,32 @@
   --wt-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   --wt-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --wt-btn-radius: 4px;
+  --wt-letter-spacing: 0.04em;
 }
 
 [data-visual-theme="win311"] {
-  --wt-bg: #008080;
+  accent-color: #000000;
+  color-scheme: only light;
+  --wt-bg: #c0c0c0;
   --wt-sidebar-bg: #c0c0c0;
-  --wt-panel-bg: #c0c0c0;
+  --wt-panel-bg: #ffffff;
   --wt-text: #000000;
   --wt-muted: #202020;
   --wt-accent: #000080;
-  --wt-accent-hover: #0000aa;
+  --wt-accent-hover: #000080;
   --wt-border: #000000;
   --wt-radius: 0;
-  --wt-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #dfdfdf, inset -2px -2px #808080, inset 2px 2px #ffffff;
-  --wt-font: "MS Sans Serif", Tahoma, Arial, sans-serif;
+  --wt-shadow: none;
+  --wt-font: "MS Sans Serif", "Microsoft Sans Serif", "Micross", Tahoma, Arial, sans-serif;
   --wt-btn-radius: 0;
 }
 
 [data-visual-theme="win95"] {
+  accent-color: #000080;
+  color-scheme: only light;
   --wt-bg: #008080;
   --wt-sidebar-bg: #c0c0c0;
-  --wt-panel-bg: #c0c0c0;
+  --wt-panel-bg: #ffffff;
   --wt-text: #000000;
   --wt-muted: #202020;
   --wt-accent: #000080;
@@ -40,7 +45,8 @@
   --wt-border: #808080;
   --wt-radius: 0;
   --wt-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #ffffff;
-  --wt-font: Tahoma, "MS Sans Serif", Arial, sans-serif;
+  --wt-font: "Handjet", "Chicago", Geneva, "Lucida Grande", system-ui, sans-serif;
+  --wt-letter-spacing: 0.06em;
   --wt-btn-radius: 0;
 }
 
@@ -75,8 +81,10 @@
 }
 
 [data-visual-theme="mac-classic-ii"] {
-  --wt-bg: #9f9f9f;
-  --wt-sidebar-bg: #dddddd;
+  accent-color: #000000;
+  color-scheme: only light;
+  --wt-bg: #ffffff;
+  --wt-sidebar-bg: #ffffff;
   --wt-panel-bg: #ffffff;
   --wt-text: #000000;
   --wt-muted: #404040;
@@ -85,7 +93,7 @@
   --wt-border: #000000;
   --wt-radius: 0;
   --wt-shadow: 1px 1px 0 #000000;
-  --wt-font: Chicago, Geneva, "Lucida Grande", system-ui, sans-serif;
+  --wt-font: "Handjet", "Chicago", Geneva, "Lucida Grande", system-ui, sans-serif;
   --wt-btn-radius: 14px;
 }
 
@@ -115,10 +123,10 @@
   background: #ffffff;
   color: #000;
   border: 1px solid #000;
+  border-radius: 5px;
 }
 
 [data-visual-theme="mac-classic-ii"] .sidebar h1 {
   font-size: 14px;
-  font-weight: bold;
-  letter-spacing: 0.02em;
+  font-weight: 500;
 }

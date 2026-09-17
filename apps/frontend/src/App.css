@@ -53,8 +53,18 @@
 }
 
 .form-group input,
-.form-group select {
+.form-group select,
+.form-group .retro-combo {
   width: 100%;
+}
+
+.retro-combo > select {
+  width: 100%;
+}
+
+.retro-combo-split,
+.retro-combo-btn {
+  display: none;
 }
 
 .sidebar > button:not(.nav-btn) {

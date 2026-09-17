@@ -12,6 +12,42 @@
   margin-bottom: 12px;
 }
 
+.admin-panel-section {
+  margin-bottom: 4px;
+}
+
+.admin-panel-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0;
+}
+
+.admin-panel-divider {
+  border: none;
+  border-top: 1px solid var(--wt-border);
+  margin: 14px 0;
+}
+
+.admin-panel .status-line {
+  font-size: 12px;
+  margin: 8px 0 0;
+}
+
+.admin-file-input {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  cursor: default;
+}
+
+.admin-file-input input[type="file"] {
+  font-size: 12px;
+  max-width: 100%;
+}
+
 .row {
   display: flex;
   gap: 8px;
