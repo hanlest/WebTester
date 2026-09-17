@@ -1,5 +1,6 @@
 @import "./themes/visual-themes.css";
 @import "./themes/win311.css";
+@import "./themes/win95.css";
 @import "./themes/mac-classic.css";
 
 * {

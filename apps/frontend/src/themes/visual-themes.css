@@ -33,9 +33,11 @@
 }
 
 [data-visual-theme="win95"] {
+  accent-color: #000080;
+  color-scheme: only light;
   --wt-bg: #008080;
   --wt-sidebar-bg: #c0c0c0;
-  --wt-panel-bg: #c0c0c0;
+  --wt-panel-bg: #ffffff;
   --wt-text: #000000;
   --wt-muted: #202020;
   --wt-accent: #000080;
@@ -43,7 +45,8 @@
   --wt-border: #808080;
   --wt-radius: 0;
   --wt-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #ffffff;
-  --wt-font: Tahoma, "MS Sans Serif", Arial, sans-serif;
+  --wt-font: "Handjet", "Chicago", Geneva, "Lucida Grande", system-ui, sans-serif;
+  --wt-letter-spacing: 0.06em;
   --wt-btn-radius: 0;
 }
 

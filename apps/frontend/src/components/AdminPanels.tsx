@@ -174,7 +174,10 @@ export function BugsPanel() {
           <div className="bug-detail">
             <h3>{String(detail.title)}</h3>
             <p>{String(detail.description)}</p>
-            <img src={`${BACKEND_URL}/api/bugs/${detail.id}/screenshot`} alt="screenshot" />
+            <img
+              src={`${BACKEND_URL}/api/bugs/${detail.id}/screenshot`}
+              alt="Captura de pantalla del bug en el momento del reporte, tal como la guardó el agente o el usuario."
+            />
             <pre>{String(detail.markdown || "").slice(0, 2000)}</pre>
             <button type="button" onClick={() => toggleReviewed(String(detail.id), true)}>Marcar revisado</button>
           </div>
